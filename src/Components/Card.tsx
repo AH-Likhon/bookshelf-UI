@@ -14,7 +14,7 @@ const Card = () => {
         <span>Genre:</span>
         <p>Publication Date:</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-neutral">Watch</button>
+          <button className="btn btn-neutral">Details</button>
         </div>
       </div>
     </div>

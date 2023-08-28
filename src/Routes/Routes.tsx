@@ -1,6 +1,7 @@
 import App from '@/App';
 import Books from '@/Pages/Books/Books';
 import Home from '@/Pages/Home/Home';
+import Login from '@/Pages/Login/Login';
 import { createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: '/books',
         element: <Books />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
       },
     ],
   },
