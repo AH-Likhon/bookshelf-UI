@@ -22,11 +22,11 @@ const genres = [
   'Business',
 ];
 
-const AddNewBook = () => {
+const EditBook = () => {
   return (
     <div className="py-10 md:py-20 px-12">
       <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">
-        Add A New Book Here
+        Edit Book Here
       </h2>
       <form className="w-1/1 md:w-[85%] lg:w-1/2 mx-auto flex flex-col gap-2">
         <div className="form-control w-full flex-row">
@@ -101,11 +101,11 @@ const AddNewBook = () => {
           </div>
         </div>
         <button className="w-full btn btn-neutral mt-2" type="submit">
-          Add Book
+          Submit
         </button>
       </form>
     </div>
   );
 };
 
-export default AddNewBook;
+export default EditBook;
