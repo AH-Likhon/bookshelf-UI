@@ -1,7 +1,3 @@
-// import { useGetTenBooksQuery } from '../../../redux/hooks/api/apiSlice';
-// import Loader from '../../../components/Loader';
-// import { Link } from 'react-router-dom';
-
 import Card from '@/Components/Card';
 
 const Home = () => {
