@@ -67,7 +67,9 @@ const Navbar = () => {
                 <p className="hover:text-neutral-content">Currently Reading</p>
               </li>
               <li className="font-medium">
-                <p className="hover:text-neutral-content">Add New Book</p>
+                <Link className="hover:text-neutral-content" to="/add-book">
+                  Add Book
+                </Link>
               </li>
               <li className="font-medium">
                 <p className="hover:text-neutral-content">user</p>
@@ -85,7 +87,7 @@ const Navbar = () => {
       <div className="navbar-end hidden lg:flex md:w-full lg:w-2/3">
         <ul className="menu menu-horizontal px-1">
           <li className="font-medium text-base">
-            <Link className="hover:text-neutral-content" to="/books">
+            <Link className="hover:text-neutral-content " to="/books">
               Books
             </Link>
           </li>
@@ -106,7 +108,9 @@ const Navbar = () => {
             <p className="hover:text-neutral-content">Currently Reading</p>
           </li>
           <li className="font-medium text-base">
-            <p className="hover:text-neutral-content">Add New Book</p>
+            <Link className="hover:text-neutral-content" to="/add-book">
+              Add Book
+            </Link>
           </li>
           <li className="font-medium text-base">
             <p className="hover:text-neutral-content">user</p>

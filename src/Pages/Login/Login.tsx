@@ -7,23 +7,33 @@ const Login = () => {
         Login
       </h2>
       <form className="w-1/1 md:w-2/3 lg:w-1/3 mx-auto flex flex-col gap-2">
-        <div className="form-control w-full">
-          <input
-            type="email"
-            className="input input-bordered w-full focus:outline-none"
-            placeholder="Enter your email..."
-          />
-          <p className="text-red-600">errors.email</p>
+        <div className="form-control w-full flex-row">
+          <label className="label items-start w-1/3">
+            <span className="text-base font-semibold ">Email:</span>
+          </label>
+          <div className="w-full">
+            <input
+              type="email"
+              className="input input-bordered w-full focus:outline-none"
+              placeholder="Enter your email..."
+            />
+            <p className="text-red-600">errors.email</p>
+          </div>
         </div>
-        <div className="form-control w-full">
-          <input
-            type="password"
-            className="input input-bordered w-full focus:outline-none"
-            placeholder="Enter your password"
-          />
-          <p className="text-red-600 mt-3">errors.password</p>
+        <div className="form-control w-full flex-row">
+          <label className="label items-start w-1/3">
+            <span className="text-base font-semibold ">Password:</span>
+          </label>
+          <div className="w-full">
+            <input
+              type="password"
+              className="input input-bordered w-full focus:outline-none"
+              placeholder="Enter your password"
+            />
+            <p className="text-red-600 mt-3">errors.password</p>
+          </div>
         </div>
-        <button className="w-full btn btn-neutral" type="submit">
+        <button className="w-full btn btn-neutral mt-2" type="submit">
           Login
         </button>
       </form>
