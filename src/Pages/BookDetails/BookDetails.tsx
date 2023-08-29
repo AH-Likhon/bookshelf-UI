@@ -11,7 +11,7 @@ const BookDetails = () => {
         <div className="hero-content items-start flex-col lg:flex-row">
           <img
             src="https://bookpresstheme.com/multiauthor/wp-content/uploads/2022/05/book-mockup13-600x795.png"
-            className="w-96 rounded-lg shadow-2xl mr-16"
+            className="w-96 rounded-lg shadow-2xl mr-16 object-fill"
           />
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl md:text-3xl font-bold">Title: </h1>

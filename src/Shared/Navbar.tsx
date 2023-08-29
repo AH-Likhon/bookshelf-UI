@@ -61,10 +61,14 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="font-medium">
-                <p className="hover:text-neutral-content">Wishlist</p>
+                <Link className="hover:text-neutral-content" to="/wishlist">
+                  Wishlist
+                </Link>
               </li>
               <li className="font-medium">
-                <p className="hover:text-neutral-content">Currently Reading</p>
+                <Link className="hover:text-neutral-content" to="reading">
+                  Currently Reading
+                </Link>
               </li>
               <li className="font-medium">
                 <Link className="hover:text-neutral-content" to="/add-book">
@@ -102,10 +106,14 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="font-medium text-base">
-            <p className="hover:text-neutral-content">Wishlist</p>
+            <Link className="hover:text-neutral-content" to="/wishlist">
+              Wishlist
+            </Link>
           </li>
           <li className="font-medium text-base">
-            <p className="hover:text-neutral-content">Currently Reading</p>
+            <Link className="hover:text-neutral-content" to="/reading">
+              Currently Reading
+            </Link>
           </li>
           <li className="font-medium text-base">
             <Link className="hover:text-neutral-content" to="/add-book">
