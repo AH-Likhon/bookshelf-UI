@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Card = () => {
   return (
     <div className="card card-side bg-base-100 shadow-xl">
@@ -14,7 +16,9 @@ const Card = () => {
         <span>Genre:</span>
         <p>Publication Date:</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-neutral">Details</button>
+          <Link to="/details">
+            <button className="btn btn-neutral">Details</button>
+          </Link>
         </div>
       </div>
     </div>

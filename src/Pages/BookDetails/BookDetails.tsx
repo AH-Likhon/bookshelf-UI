@@ -19,7 +19,7 @@ const BookDetails = () => {
             <h1 className="text-lg lg:text-xl">Genre: </h1>
             <h1 className="text-lg lg:text-xl">Published Date:</h1>
             <div className="w-full flex gap-2">
-              <Link to={`/books/edit/`}>
+              <Link to={`/edit`}>
                 <button className="w-full btn btn-primary">Edit</button>
               </Link>
               <button className="w-1/2 btn btn-warning">Delete</button>
