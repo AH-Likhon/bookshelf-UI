@@ -1,49 +1,102 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useSignUpUserMutation } from '@/Redux/api/apiSlice';
 
+type Inputs = {
+  name: string;
+  email: string;
+  password: string;
+};
 const SignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const navigate = useNavigate();
+  const [signUp, { data: signUpData }] = useSignUpUserMutation();
+
+  const handleSignUp: SubmitHandler<Inputs> = (data) => {
+    signUp(data);
+  };
+
+  useEffect(() => {
+    if (signUpData?.success) {
+      toast.success(signUpData.message);
+      reset();
+      navigate('/login');
+    }
+  }, [reset, navigate, signUpData?.message, signUpData?.success]);
+
   return (
-    <div className="py-10 md:py-20 px-12">
+    <div className="py-10 md:py-[86px] px-12">
       <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">
         SignUp
       </h2>
-      <form className="w-1/1 md:w-2/3 lg:w-1/3 mx-auto flex flex-col gap-2">
+      <form
+        onSubmit={handleSubmit(handleSignUp)}
+        className="w-1/1 md:w-2/3 lg:w-1/3 mx-auto flex flex-col gap-2"
+      >
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
-            <span className="text-base font-semibold ">Name:</span>
+            <span className="text-base font-semibold">Name:</span>
           </label>
           <div className="w-full">
             <input
               type="text"
               className="input input-bordered w-full focus:outline-none"
               placeholder="Enter your name..."
+              {...register('name', { required: 'Name is required' })}
             />
-            <p className="text-red-600">errors.name</p>
+            {/* Display error message */}
+            {errors.name && (
+              <p className="text-red-600">{errors.name?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
-            <span className="text-base font-semibold ">Email:</span>
+            <span className="text-base font-semibold">Email:</span>
           </label>
           <div className="w-full">
             <input
               type="email"
               className="input input-bordered w-full focus:outline-none"
               placeholder="Enter your email..."
+              {...register('email', { required: 'Email is required' })}
             />
-            <p className="text-red-600">errors.email</p>
+            {/* Display error message */}
+            {errors.email && (
+              <p className="text-red-600">{errors.email?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
-            <span className="text-base font-semibold ">Password:</span>
+            <span className="text-base font-semibold">Password:</span>
           </label>
           <div className="w-full">
             <input
               type="password"
               className="input input-bordered w-full focus:outline-none"
               placeholder="Enter your password"
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message:
+                    'Password must be greater than or equal to 6 characters',
+                },
+              })}
             />
-            <p className="text-red-600 mt-3">errors.password</p>
+            {/* Display error message */}
+            {errors.password && (
+              <p className="text-red-600 mt-3">{errors.password?.message}</p>
+            )}
           </div>
         </div>
         <button className="w-full btn btn-neutral mt-2" type="submit">
