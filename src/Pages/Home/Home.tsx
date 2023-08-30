@@ -7,7 +7,11 @@ const Home = () => {
   });
 
   if (isLoading) {
-    return <span className="loading loading-ring loading-lg"></span>;
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
   }
 
   console.log('Books', books);

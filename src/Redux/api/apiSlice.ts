@@ -8,13 +8,19 @@ const api = createApi({
   }),
   tagTypes: ['books', 'wishlist', 'reading'],
   endpoints: (builder) => ({
-    signUpUser: builder.mutation({
+    signUp: builder.mutation({
       query: (data) => ({
         url: `/auth/signup`,
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['books'],
+    }),
+    logIn: builder.mutation({
+      query: (data) => ({
+        url: `/auth/login`,
+        method: 'POST',
+        body: data,
+      }),
     }),
     getAllBooks: builder.query({
       query: () => `/books`,
@@ -25,4 +31,4 @@ const api = createApi({
 
 export default api;
 
-export const { useSignUpUserMutation, useGetAllBooksQuery } = api;
+export const { useSignUpMutation, useLogInMutation, useGetAllBooksQuery } = api;

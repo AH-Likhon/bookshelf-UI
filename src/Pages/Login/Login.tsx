@@ -1,12 +1,75 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { Inputs, User } from '@/Types/types';
+import { useLogInMutation } from '@/Redux/api/apiSlice';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useAppDispatch } from '@/Redux/hooks';
+import { setUser } from '@/Redux/features/user/userSlice';
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const from = location.state?.from?.pathname || '/';
+
+  const [userData, setUserData] = useState<User>();
+
+  const [logIn, { data: logInData, error: loginError }] = useLogInMutation();
+
+  const handleLogIn: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const response = await logIn(data);
+      if (response?.data?.success) {
+        setUserData({
+          email: data?.email,
+          token: response?.data?.data?.accessToken,
+        });
+      }
+    } catch (error) {
+      toast.error(loginError?.data.message);
+    }
+  };
+
+  useEffect(() => {
+    if (logInData?.success && userData) {
+      dispatch(setUser(userData));
+      reset();
+      toast.success(logInData.message);
+      navigate(from, { replace: true });
+    } else if (loginError) {
+      toast.error(loginError?.data.message);
+    }
+  }, [
+    dispatch,
+    logInData,
+    logInData?.message,
+    logInData?.success,
+    loginError,
+    navigate,
+    reset,
+    userData,
+    from,
+  ]);
+
+  // const from = location.state?.from?.pathname || "/";
+
   return (
     <div className="py-10 md:py-20 px-12 h-full lg:h-[81vh]">
       <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">
         Login
       </h2>
-      <form className="w-1/1 md:w-2/3 lg:w-1/3 mx-auto flex flex-col gap-2">
+      <form
+        onSubmit={handleSubmit(handleLogIn)}
+        className="w-1/1 md:w-2/3 lg:w-1/3 mx-auto flex flex-col gap-2"
+      >
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
             <span className="text-base font-semibold ">Email:</span>
@@ -16,8 +79,12 @@ const Login = () => {
               type="email"
               className="input input-bordered w-full focus:outline-none"
               placeholder="Enter your email..."
+              {...register('email', { required: 'Email is required' })}
             />
-            <p className="text-red-600">errors.email</p>
+            {/* Display error message */}
+            {errors.email && (
+              <p className="text-red-600">{errors.email?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
@@ -29,8 +96,19 @@ const Login = () => {
               type="password"
               className="input input-bordered w-full focus:outline-none"
               placeholder="Enter your password"
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message:
+                    'Password must be greater than or equal to 6 characters',
+                },
+              })}
             />
-            <p className="text-red-600 mt-3">errors.password</p>
+            {/* Display error message */}
+            {errors.password && (
+              <p className="text-red-600 mt-3">{errors.password?.message}</p>
+            )}
           </div>
         </div>
         <button className="w-full btn btn-neutral mt-2" type="submit">

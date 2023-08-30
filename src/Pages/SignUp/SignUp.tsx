@@ -2,13 +2,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useEffect } from 'react';
-import { useSignUpUserMutation } from '@/Redux/api/apiSlice';
+import { useSignUpMutation } from '@/Redux/api/apiSlice';
+import { Inputs } from '@/Types/types';
 
-type Inputs = {
-  name: string;
-  email: string;
-  password: string;
-};
 const SignUp = () => {
   const {
     register,
@@ -18,7 +14,8 @@ const SignUp = () => {
   } = useForm<Inputs>();
 
   const navigate = useNavigate();
-  const [signUp, { data: signUpData }] = useSignUpUserMutation();
+  const [signUp, { data: signUpData, error: signUpError }] =
+    useSignUpMutation();
 
   const handleSignUp: SubmitHandler<Inputs> = (data) => {
     signUp(data);
@@ -29,8 +26,10 @@ const SignUp = () => {
       toast.success(signUpData.message);
       reset();
       navigate('/login');
+    } else if (signUpError) {
+      toast.error(signUpError?.data.message);
     }
-  }, [reset, navigate, signUpData?.message, signUpData?.success]);
+  }, [reset, navigate, signUpData?.message, signUpData?.success, signUpError]);
 
   return (
     <div className="py-10 md:py-[86px] px-12">
