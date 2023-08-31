@@ -59,8 +59,6 @@ const Login = () => {
     from,
   ]);
 
-  // const from = location.state?.from?.pathname || "/";
-
   return (
     <div className="py-10 md:py-20 px-12 h-full lg:h-[81vh]">
       <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">

@@ -1,8 +1,46 @@
-import { useState } from 'react';
+import { useLogOutMutation } from '@/Redux/api/apiSlice';
+import { setLogOut } from '@/Redux/features/user/userSlice';
+import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [clicked, setClicked] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [logOut, { data: logOutData, error: logOutError }] =
+    useLogOutMutation();
+  const { user } = useAppSelector((state) => state.user);
+  console.log(user.token);
+
+  const handleLogOut = async () => {
+    await logOut({}); // Await the mutation
+  };
+
+  console.log('Data loggOutError::', logOutError);
+  console.log('Data loggOutData:', logOutData?.data?.accessToken);
+
+  useEffect(() => {
+    if (logOutData?.success) {
+      dispatch(
+        setLogOut({ email: null, token: logOutData?.data?.accessToken })
+      );
+      toast.success(logOutData.message);
+      navigate('/login');
+    } else if (logOutError) {
+      toast.error(logOutError?.data.message);
+    }
+  }, [
+    dispatch,
+    logOutData?.data?.accessToken,
+    logOutData?.message,
+    logOutData?.success,
+    logOutError,
+    navigate,
+  ]);
 
   return (
     <div className="navbar flex justify-between bg-neutral text-neutral-content">
@@ -78,7 +116,7 @@ const Navbar = () => {
               <li className="font-medium">
                 <p className="hover:text-neutral-content">user</p>
               </li>
-              <li className="font-medium">
+              <li onClick={handleLogOut} className="font-medium">
                 <p className="hover:text-neutral-content">logout</p>
               </li>
             </ul>
@@ -123,7 +161,7 @@ const Navbar = () => {
           <li className="font-medium text-base">
             <p className="hover:text-neutral-content">user</p>
           </li>
-          <li className="font-medium text-base">
+          <li onClick={handleLogOut} className="font-medium text-base">
             <p className="hover:text-neutral-content">logout</p>
           </li>
         </ul>
