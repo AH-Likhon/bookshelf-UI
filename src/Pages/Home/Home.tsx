@@ -1,5 +1,6 @@
 import Card from '@/Components/Card';
 import { useGetAllBooksQuery } from '@/Redux/api/apiSlice';
+import { IBook } from '@/Types/types';
 
 const Home = () => {
   const { data: books, isLoading } = useGetAllBooksQuery({
@@ -20,7 +21,9 @@ const Home = () => {
         Feature Books
       </h2>
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <Card />
+        {books?.data.slice(0, 10).map((book: IBook) => (
+          <Card key={book._id} book={book} />
+        ))}
       </div>
     </div>
   );

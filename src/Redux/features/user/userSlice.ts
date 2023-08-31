@@ -1,6 +1,5 @@
-import api from '@/Redux/api/apiSlice';
 import { User } from '@/Types/types';
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 // [x: string]: any;
 
@@ -21,37 +20,6 @@ const initialState: InitialState = {
   isError: false,
   error: null,
 };
-
-// export const refreshAccessToken = createAsyncThunk(
-//   'user/refreshAccessToken',
-//   async (_, { dispatch }) => {
-//     try {
-//       await api.endpoints.refreshToken.mutation();
-
-//       // Fetch the updated user data from the server
-//       const response = await api.endpoints.logIn.mutation({});
-//       dispatch(setUser(response.data));
-//     } catch (error) {
-//       // Handle error (e.g., log out user or show an error message)
-//     }
-//   }
-// );
-
-// export const refreshAccessToken = createAsyncThunk(
-//   'user/refreshAccessToken',
-//   async (_, { dispatch }) => {
-//     try {
-//       const response = await api.endpoints.refreshToken.mutation({
-//         refreshToken,
-//       });
-
-//       // Fetch the updated user data from the server
-//       dispatch(setUser(response.data));
-//     } catch (error) {
-//       // Handle error (e.g., log out user or show an error message)
-//     }
-//   }
-// );
 
 const userSlice = createSlice({
   name: 'user',

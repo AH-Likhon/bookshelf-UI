@@ -9,3 +9,19 @@ export type User = {
   name: string | null;
   token: string | null;
 };
+
+export type IReview = {
+  rating: number;
+  reviewText: string;
+};
+
+export type IBook = {
+  _id: string;
+  image: string;
+  title: string;
+  author: string;
+  genre: string;
+  publicationDate: string;
+  seller: string;
+  reviews: IReview[];
+};
