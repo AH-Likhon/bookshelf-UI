@@ -10,9 +10,6 @@ const api = createApi({
     prepareHeaders: (headers, { getState, endpoint }) => {
       const user = (getState() as RootState).user;
 
-      console.log('User API', user?.user?.token);
-      console.log('User API', user);
-
       if (user && endpoint !== 'refresh') {
         headers.set('authorization', `${user?.user?.token}`);
       }
@@ -42,9 +39,12 @@ const api = createApi({
         method: 'POST',
       }),
     }),
-    // logOut: builder.query({
-    //   query: () => `/auth/logout`,
-    // }),
+    refreshToken: builder.mutation({
+      query: () => ({
+        url: `/auth/refresh-token`,
+        method: 'POST',
+      }),
+    }),
     getAllBooks: builder.query({
       query: () => `/books`,
       providesTags: ['books'],
@@ -58,6 +58,6 @@ export const {
   useSignUpMutation,
   useLogInMutation,
   useLogOutMutation,
-  //   useLogOutQuery,
   useGetAllBooksQuery,
+  useRefreshTokenMutation,
 } = api;

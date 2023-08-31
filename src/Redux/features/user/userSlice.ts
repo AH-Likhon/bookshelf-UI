@@ -1,8 +1,10 @@
+import api from '@/Redux/api/apiSlice';
 import { User } from '@/Types/types';
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+// [x: string]: any;
 
 type InitialState = {
-  [x: string]: any;
   user: User;
   isLoading: boolean;
   isError: boolean;
@@ -12,6 +14,7 @@ type InitialState = {
 const initialState: InitialState = {
   user: {
     email: null,
+    name: null,
     token: null,
   },
   isLoading: false,
@@ -19,19 +22,49 @@ const initialState: InitialState = {
   error: null,
 };
 
+// export const refreshAccessToken = createAsyncThunk(
+//   'user/refreshAccessToken',
+//   async (_, { dispatch }) => {
+//     try {
+//       await api.endpoints.refreshToken.mutation();
+
+//       // Fetch the updated user data from the server
+//       const response = await api.endpoints.logIn.mutation({});
+//       dispatch(setUser(response.data));
+//     } catch (error) {
+//       // Handle error (e.g., log out user or show an error message)
+//     }
+//   }
+// );
+
+// export const refreshAccessToken = createAsyncThunk(
+//   'user/refreshAccessToken',
+//   async (_, { dispatch }) => {
+//     try {
+//       const response = await api.endpoints.refreshToken.mutation({
+//         refreshToken,
+//       });
+
+//       // Fetch the updated user data from the server
+//       dispatch(setUser(response.data));
+//     } catch (error) {
+//       // Handle error (e.g., log out user or show an error message)
+//     }
+//   }
+// );
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
-      console.log(action?.payload?.token);
-      state.user = action.payload || { email: null, token: null };
+      state.user = action.payload || { email: null, name: null, token: null };
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
     setLogOut: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload || { email: null, token: null };
+      state.user = action.payload || { email: null, name: null, token: null };
     },
   },
   //   extraReducers: (builder) => {},

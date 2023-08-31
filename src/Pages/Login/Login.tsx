@@ -26,11 +26,12 @@ const Login = () => {
 
   const handleLogIn: SubmitHandler<Inputs> = async (data) => {
     try {
-      const response = await logIn(data);
-      if (response?.data?.success) {
+      const res = await logIn(data);
+      if (res?.data?.success) {
         setUserData({
-          email: data?.email,
-          token: response?.data?.data?.accessToken,
+          email: res?.data?.data?.user?.email,
+          name: res?.data?.data?.user?.name,
+          token: res?.data?.data?.accessToken,
         });
       }
     } catch (error) {
@@ -45,7 +46,7 @@ const Login = () => {
       toast.success(logInData.message);
       navigate(from, { replace: true });
     } else if (loginError) {
-      toast.error(loginError?.data.message);
+      toast.error(loginError?.data?.message);
     }
   }, [
     dispatch,

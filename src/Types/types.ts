@@ -6,5 +6,6 @@ export type Inputs = {
 
 export type User = {
   email: string | null;
+  name: string | null;
   token: string | null;
 };

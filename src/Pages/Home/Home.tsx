@@ -14,8 +14,6 @@ const Home = () => {
     );
   }
 
-  console.log('Books', books);
-
   return (
     <div className="py-10 md:py-20 px-12">
       <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">

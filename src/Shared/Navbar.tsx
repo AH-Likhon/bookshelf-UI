@@ -8,38 +8,41 @@ import { Link, useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const [clicked, setClicked] = useState(false);
 
+  const { user } = useAppSelector((state) => state.user);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const from = location.state?.from?.pathname || '/';
+
   const [logOut, { data: logOutData, error: logOutError }] =
     useLogOutMutation();
-  const { user } = useAppSelector((state) => state.user);
-  console.log(user.token);
 
   const handleLogOut = async () => {
     await logOut({}); // Await the mutation
   };
 
-  console.log('Data loggOutError::', logOutError);
-  console.log('Data loggOutData:', logOutData?.data?.accessToken);
-
   useEffect(() => {
     if (logOutData?.success) {
       dispatch(
-        setLogOut({ email: null, token: logOutData?.data?.accessToken })
+        setLogOut({
+          email: null,
+          name: null,
+          token: null,
+        })
       );
       toast.success(logOutData.message);
-      navigate('/login');
+      navigate(from, { replace: true });
     } else if (logOutError) {
-      toast.error(logOutError?.data.message);
+      toast.error(logOutError?.data?.message);
     }
   }, [
     dispatch,
-    logOutData?.data?.accessToken,
     logOutData?.message,
     logOutData?.success,
     logOutError,
     navigate,
+    from,
   ]);
 
   return (
@@ -88,37 +91,45 @@ const Navbar = () => {
                   Books
                 </Link>
               </li>
-              <li className="font-medium">
-                <Link className="hover:text-neutral-content" to="/login">
-                  Login
-                </Link>
-              </li>
-              <li className="font-medium">
-                <Link className="hover:text-neutral-content" to="/signup">
-                  Sign up
-                </Link>
-              </li>
-              <li className="font-medium">
-                <Link className="hover:text-neutral-content" to="/wishlist">
-                  Wishlist
-                </Link>
-              </li>
-              <li className="font-medium">
-                <Link className="hover:text-neutral-content" to="reading">
-                  Currently Reading
-                </Link>
-              </li>
-              <li className="font-medium">
-                <Link className="hover:text-neutral-content" to="/add-book">
-                  Add Book
-                </Link>
-              </li>
-              <li className="font-medium">
-                <p className="hover:text-neutral-content">user</p>
-              </li>
-              <li onClick={handleLogOut} className="font-medium">
-                <p className="hover:text-neutral-content">logout</p>
-              </li>
+              {!user?.email && (
+                <>
+                  <li className="font-medium">
+                    <Link className="hover:text-neutral-content" to="/login">
+                      Login
+                    </Link>
+                  </li>
+                  <li className="font-medium">
+                    <Link className="hover:text-neutral-content" to="/signup">
+                      Sign up
+                    </Link>
+                  </li>
+                </>
+              )}
+              {user?.email && (
+                <>
+                  <li className="font-medium">
+                    <Link className="hover:text-neutral-content" to="/wishlist">
+                      Wishlist
+                    </Link>
+                  </li>
+                  <li className="font-medium">
+                    <Link className="hover:text-neutral-content" to="reading">
+                      Currently Reading
+                    </Link>
+                  </li>
+                  <li className="font-medium">
+                    <Link className="hover:text-neutral-content" to="/add-book">
+                      Add Book
+                    </Link>
+                  </li>
+                  <li onClick={handleLogOut} className="font-medium">
+                    <p className="hover:text-neutral-content">Logout</p>
+                  </li>
+                  <li className="font-medium">
+                    <p className="hover:text-neutral-content">{user?.name}</p>
+                  </li>
+                </>
+              )}
             </ul>
           )}
         </div>
@@ -133,37 +144,45 @@ const Navbar = () => {
               Books
             </Link>
           </li>
-          <li className="font-medium text-base">
-            <Link className="hover:text-neutral-content" to="/login">
-              Login
-            </Link>
-          </li>
-          <li className="font-medium text-base">
-            <Link className="hover:text-neutral-content" to="/signup">
-              Sign up
-            </Link>
-          </li>
-          <li className="font-medium text-base">
-            <Link className="hover:text-neutral-content" to="/wishlist">
-              Wishlist
-            </Link>
-          </li>
-          <li className="font-medium text-base">
-            <Link className="hover:text-neutral-content" to="/reading">
-              Currently Reading
-            </Link>
-          </li>
-          <li className="font-medium text-base">
-            <Link className="hover:text-neutral-content" to="/add-book">
-              Add Book
-            </Link>
-          </li>
-          <li className="font-medium text-base">
-            <p className="hover:text-neutral-content">user</p>
-          </li>
-          <li onClick={handleLogOut} className="font-medium text-base">
-            <p className="hover:text-neutral-content">logout</p>
-          </li>
+          {!user?.email && (
+            <>
+              <li className="font-medium text-base">
+                <Link className="hover:text-neutral-content" to="/login">
+                  Login
+                </Link>
+              </li>
+              <li className="font-medium text-base">
+                <Link className="hover:text-neutral-content" to="/signup">
+                  Sign up
+                </Link>
+              </li>
+            </>
+          )}
+          {user?.email && (
+            <>
+              <li className="font-medium text-base">
+                <Link className="hover:text-neutral-content" to="/wishlist">
+                  Wishlist
+                </Link>
+              </li>
+              <li className="font-medium text-base">
+                <Link className="hover:text-neutral-content" to="/reading">
+                  Currently Reading
+                </Link>
+              </li>
+              <li className="font-medium text-base">
+                <Link className="hover:text-neutral-content" to="/add-book">
+                  Add Book
+                </Link>
+              </li>
+              <li onClick={handleLogOut} className="font-medium text-base">
+                <p className="hover:text-neutral-content">Logout</p>
+              </li>
+              <li className="font-medium text-base">
+                <p className="hover:text-neutral-content">{user?.name}</p>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>
