@@ -61,6 +61,14 @@ const api = createApi({
       query: (id) => `/books/${id}`,
       providesTags: ['books'],
     }),
+    updateSingleBook: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/books/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['books'],
+    }),
   }),
 });
 
@@ -74,4 +82,5 @@ export const {
   useAddNewBookMutation,
   useGetAllBooksQuery,
   useGetSingleBookQuery,
+  useUpdateSingleBookMutation,
 } = api;

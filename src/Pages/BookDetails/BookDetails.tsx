@@ -1,31 +1,12 @@
-import {
-  useGetSingleBookQuery,
-  useRefreshTokenMutation,
-} from '@/Redux/api/apiSlice';
-import { useAppDispatch } from '@/Redux/hooks';
+import { useGetSingleBookQuery } from '@/Redux/api/apiSlice';
 import { Link, useParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
-import refreshAccessToken from '@/Shared/reFreshAccess';
 
 const BookDetails = () => {
   const { id } = useParams();
 
-  const { data, isLoading, refetch } = useGetSingleBookQuery(id, {
+  const { data, isLoading } = useGetSingleBookQuery(id, {
     refetchOnMountOrArgChange: true,
   });
-
-  const dispatch = useAppDispatch();
-  const [refreshing, setRefreshing] = useState(true); // Use a state variable
-  const refreshToken = Cookies.get('refreshToken');
-  const [refresh] = useRefreshTokenMutation();
-
-  useEffect(() => {
-    refreshAccessToken(refreshToken, dispatch, refresh, setRefreshing);
-    if (!refreshing) {
-      refetch();
-    }
-  }, [dispatch, refresh, refreshToken, refetch, refreshing]);
 
   // console.log('data:::', data?.data);
 

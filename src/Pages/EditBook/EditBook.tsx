@@ -1,34 +1,122 @@
-const genres = [
-  'Fiction',
-  'Mystery',
-  'Science Fiction',
-  'Fantasy',
-  'Romance',
-  'Adventure',
-  'Historical Fiction',
-  'Biography',
-  'Self-Help',
-  'Poetry',
-  'Comedy',
-  'Drama',
-  'Young Adult',
-  'Graphic Novel',
-  'Cookbook',
-  'Science',
-  'History',
-  'Philosophy',
-  'Art',
-  'Sports',
-  'Business',
-];
+import {
+  useGetSingleBookQuery,
+  useUpdateSingleBookMutation,
+} from '@/Redux/api/apiSlice';
+import { useParams } from 'react-router-dom';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { format, parse } from 'date-fns';
+import { IBook, genres } from '@/Types/types';
+import { useAppSelector } from '@/Redux/hooks';
+import { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 const EditBook = () => {
+  const { id } = useParams();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<IBook>();
+
+  const { user } = useAppSelector((state) => state.user);
+
+  const { data: book, isLoading } = useGetSingleBookQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const [updateBook, { data: updateBookData, error: updateBookError }] =
+    useUpdateSingleBookMutation();
+
+  const handleBookUpdate: SubmitHandler<IBook> = async (data) => {
+    const { image, publicationDate } = data;
+    const formattedPublicationDate = format(
+      new Date(publicationDate),
+      'dd-MM-yyyy'
+    );
+
+    if (image && image[0]) {
+      const file = image[0];
+      const response = await fetch(file);
+      const blob = await response.blob();
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64Result = reader.result ? reader.result.toString() : null;
+        const processedData = {
+          ...data,
+          image: base64Result,
+          publicationDate: formattedPublicationDate,
+          seller: user._id,
+        };
+
+        const options = {
+          id: book?.data?.id,
+          data: processedData,
+        };
+
+        console.log('if:::', options);
+
+        updateBook(options);
+      };
+
+      reader.readAsDataURL(blob);
+    } else {
+      const processedData = {
+        ...data,
+        image: book?.data.image,
+        publicationDate: formattedPublicationDate,
+        seller: user._id,
+      };
+
+      const options = {
+        id: book?.data?.id,
+        data: processedData,
+      };
+
+      console.log('else:::', options);
+
+      updateBook(options);
+    }
+
+    // console.log('Update data::', data);
+  };
+
+  const formatDate = (inputDate: string) => {
+    // Parse the input date in 'dd-MM-yyyy' format
+    const dateObject = parse(inputDate, 'dd-MM-yyyy', new Date());
+    const parsedDate = format(dateObject, 'yyyy-MM-dd');
+    return parsedDate;
+  };
+
+  useEffect(() => {
+    if (updateBookData?.success) {
+      toast.success(updateBookData?.message);
+      reset();
+    } else if (updateBookError) {
+      toast.error(updateBookError?.data?.message);
+    }
+  }, [reset, updateBookData, updateBookError]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
     <div className="py-10 md:py-20 px-12">
       <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">
         Edit Book Here
       </h2>
-      <form className="w-1/1 md:w-[85%] lg:w-1/2 mx-auto flex flex-col gap-2">
+      <form
+        onSubmit={handleSubmit(handleBookUpdate)}
+        className="w-1/1 md:w-[85%] lg:w-1/2 mx-auto flex flex-col gap-2"
+      >
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
             <span className="text-base font-semibold ">Book Author:</span>
@@ -37,9 +125,13 @@ const EditBook = () => {
             <input
               type="text"
               className="input input-bordered w-full focus:outline-none"
-              placeholder="Enter author..."
+              // placeholder="Enter author..."
+              defaultValue={book?.data.author}
+              {...register('author')}
             />
-            <p className="text-red-600">errors.author</p>
+            {errors.author && (
+              <p className="text-red-600">{errors.author?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
@@ -50,30 +142,37 @@ const EditBook = () => {
             <input
               type="text"
               className="input input-bordered w-full focus:outline-none"
-              placeholder="Enter title..."
+              defaultValue={book?.data.title}
+              {...register('title')}
             />
-            <p className="text-red-600">errors.title</p>
+            {errors.title && (
+              <p className="text-red-600">{errors.title?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
-            <span className="text-base font-semibold ">Publication Year:</span>
+            <span className="text-base font-semibold ">Genre:</span>
           </label>
           <div className="w-full">
             <select
               className="select select-bordered focus:outline-none w-full"
               name="genre"
             >
-              <option value="">Publication Year</option>
+              <option defaultValue={book?.data?.genre}>
+                {book?.data?.genre}
+              </option>
               {genres &&
                 genres.length > 0 &&
                 genres.map((genre) => (
-                  <option key={genre} value={genre}>
+                  <option key={genre} value={genre} {...register('genre')}>
                     {genre}
                   </option>
                 ))}
             </select>
-            <p className="text-red-600">errors.publicationYear</p>
+            {errors.genre && (
+              <p className="text-red-600">{errors.genre?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
@@ -84,8 +183,12 @@ const EditBook = () => {
             <input
               type="date"
               className="input input-bordered w-full focus:outline-none"
+              defaultValue={formatDate(book?.data.publicationDate)}
+              {...register('publicationDate')}
             />
-            <p className="text-red-600 mt-3">errors.publicationDate</p>
+            {errors.publicationDate && (
+              <p className="text-red-600">{errors.publicationDate?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
@@ -94,10 +197,15 @@ const EditBook = () => {
           </label>
           <div className="w-full">
             <input
+              accept="image/*"
               type="file"
               className="file-input input-bordered w-full focus:outline-none"
+              // defaultValue={data?.data.image}
+              {...register('image')}
             />
-            <p className="text-red-600 mt-3">errors.cover</p>
+            {errors.image && (
+              <p className="text-red-600">{errors.image?.message}</p>
+            )}
           </div>
         </div>
         <button className="w-full btn btn-neutral mt-2" type="submit">

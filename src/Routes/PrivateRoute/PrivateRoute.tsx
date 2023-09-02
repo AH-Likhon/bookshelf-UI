@@ -15,12 +15,21 @@ const PrivateRoute = ({ children }: IProps) => {
 
   const dispatch = useAppDispatch();
   const [refreshing, setRefreshing] = useState(true); // Use a state variable
-  const refreshToken = Cookies.get('refreshToken');
+  // const refreshToken = Cookies.get('refreshToken');
   const [refresh] = useRefreshTokenMutation();
 
+  // useEffect(() => {
+  //   refreshAccessToken(refreshToken, dispatch, refresh, setRefreshing);
+  // }, [dispatch, isLoading, refresh, refreshToken, user]);
+
   useEffect(() => {
-    refreshAccessToken(refreshToken, dispatch, refresh, setRefreshing);
-  }, [dispatch, isLoading, refresh, refreshToken, user]);
+    const refreshToken = Cookies.get('refreshToken');
+    if (refreshToken) {
+      refreshAccessToken(refreshToken, dispatch, refresh, setRefreshing);
+    } else {
+      setRefreshing(false);
+    }
+  }, []);
 
   // console.log('User::', user);
 
