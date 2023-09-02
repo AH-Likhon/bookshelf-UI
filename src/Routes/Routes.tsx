@@ -9,6 +9,7 @@ import Login from '@/Pages/Login/Login';
 import SignUp from '@/Pages/SignUp/SignUp';
 import Wishlist from '@/Pages/Wishlist/Wishlist';
 import { createBrowserRouter } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute/PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/books',
-        element: <Books />,
+        element: (
+          <PrivateRoute>
+            <Books />
+          </PrivateRoute>
+        ),
       },
       {
         path: '/login',
@@ -41,7 +46,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/details',
-        element: <BookDetails />,
+        element: (
+          <PrivateRoute>
+            <BookDetails />
+          </PrivateRoute>
+        ),
       },
       {
         path: '/wishlist',

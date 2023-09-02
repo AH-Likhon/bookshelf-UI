@@ -1,10 +1,8 @@
 import { IBook } from '@/Types/types';
 import { Link } from 'react-router-dom';
 
-const Card = (props: { book: IBook }) => {
-  const { book } = props;
-
-  console.log(book?.image);
+const Card = ({ book }: { book: IBook }) => {
+  // console.log(book?.image);
 
   return (
     <div className="card card-side bg-base-100 shadow-xl">
