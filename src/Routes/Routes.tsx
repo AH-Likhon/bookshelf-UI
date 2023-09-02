@@ -1,15 +1,16 @@
 import App from '@/App';
-import AddNewBook from '@/Pages/AddNewBook/AddNewBook';
-import BookDetails from '@/Pages/BookDetails/BookDetails';
-import Books from '@/Pages/Books/Books';
-import CurrentlyReading from '@/Pages/CurrentlyReading/CurrentlyReading';
-import EditBook from '@/Pages/EditBook/EditBook';
-import Home from '@/Pages/Home/Home';
-import Login from '@/Pages/Login/Login';
-import SignUp from '@/Pages/SignUp/SignUp';
-import Wishlist from '@/Pages/Wishlist/Wishlist';
+import AddNewBook from '@/Pages/AddNewBook';
+import BookDetails from '@/Pages/BookDetails';
+import Books from '@/Pages/Books';
+import CurrentlyReading from '@/Pages/CurrentlyReading';
+import EditBook from '@/Pages/EditBook';
+import Home from '@/Pages/Home';
+import Login from '@/Pages/Login';
+import SignUp from '@/Pages/SignUp';
+import Wishlist from '@/Pages/Wishlist';
 import { createBrowserRouter } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute/PrivateRoute';
+import NotFound from '@/Pages/NotFound';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
       {
         path: '/login',
