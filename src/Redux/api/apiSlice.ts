@@ -69,6 +69,13 @@ const api = createApi({
       }),
       invalidatesTags: ['books'],
     }),
+    deleteBook: builder.mutation({
+      query: (id) => ({
+        url: `/books/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['books'],
+    }),
   }),
 });
 
