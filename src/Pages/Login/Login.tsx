@@ -29,6 +29,7 @@ const Login = () => {
       const res = await logIn(data);
       if (res?.data?.success) {
         setUserData({
+          _id: res?.data?.data?.user?._id,
           email: res?.data?.data?.user?.email,
           name: res?.data?.data?.user?.name,
           token: res?.data?.data?.accessToken,

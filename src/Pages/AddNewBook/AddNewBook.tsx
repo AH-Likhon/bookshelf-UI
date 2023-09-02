@@ -1,34 +1,82 @@
-const genres = [
-  'Fiction',
-  'Mystery',
-  'Science Fiction',
-  'Fantasy',
-  'Romance',
-  'Adventure',
-  'Historical Fiction',
-  'Biography',
-  'Self-Help',
-  'Poetry',
-  'Comedy',
-  'Drama',
-  'Young Adult',
-  'Graphic Novel',
-  'Cookbook',
-  'Science',
-  'History',
-  'Philosophy',
-  'Art',
-  'Sports',
-  'Business',
-];
+import { useAddNewBookMutation } from '@/Redux/api/apiSlice';
+import { useAppSelector } from '@/Redux/hooks';
+import { IBook, genres } from '@/Types/types';
+import { format } from 'date-fns';
+import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 const AddNewBook = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<IBook>();
+
+  const { user } = useAppSelector((state) => state.user);
+
+  const [addNewBook, { data: addBookData, error: addBookError }] =
+    useAddNewBookMutation();
+
+  const handleBookPublish: SubmitHandler<IBook> = async (data) => {
+    const { image, publicationDate } = data;
+
+    const formattedPublicationDate = format(
+      new Date(publicationDate),
+      'dd-MM-yyyy'
+    );
+
+    if (image && image[0]) {
+      const file = image[0];
+      const response = await fetch(file);
+      const blob = await response.blob();
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64Result = reader.result ? reader.result.toString() : null;
+        const processedData = {
+          ...data,
+          image: base64Result,
+          publicationDate: formattedPublicationDate,
+          seller: user._id,
+        };
+
+        console.log(processedData);
+        addNewBook(processedData);
+      };
+
+      reader.readAsDataURL(blob);
+    }
+  };
+
+  useEffect(() => {
+    if (addBookData?.success) {
+      toast.success(addBookData.message);
+      console.log('SSs', addBookData);
+      reset();
+    } else if (addBookError) {
+      console.log('Book rror::', addBookError);
+      toast.error(addBookError?.data?.message);
+    }
+  }, [
+    addBookData,
+    addBookData?.message,
+    addBookData?.success,
+    addBookError,
+    reset,
+  ]);
+
   return (
     <div className="py-10 md:py-20 px-12">
       <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">
-        Add A New Book Here
+        Let's publish a new book😄
       </h2>
-      <form className="w-1/1 md:w-[85%] lg:w-1/2 mx-auto flex flex-col gap-2">
+
+      <form
+        onSubmit={handleSubmit(handleBookPublish)}
+        className="w-1/1 md:w-[85%] lg:w-1/2 mx-auto flex flex-col gap-2"
+      >
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
             <span className="text-base font-semibold ">Book Author:</span>
@@ -38,8 +86,13 @@ const AddNewBook = () => {
               type="text"
               className="input input-bordered w-full focus:outline-none"
               placeholder="Enter author..."
+              {...register('author', {
+                required: 'Author is required',
+              })}
             />
-            <p className="text-red-600">errors.author</p>
+            {errors.author && (
+              <p className="text-red-600">{errors.author?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
@@ -51,29 +104,42 @@ const AddNewBook = () => {
               type="text"
               className="input input-bordered w-full focus:outline-none"
               placeholder="Enter title..."
+              {...register('title', {
+                required: 'Title is required',
+              })}
             />
-            <p className="text-red-600">errors.title</p>
+            {errors.title && (
+              <p className="text-red-600">{errors.title?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
           <label className="label items-start w-1/3">
-            <span className="text-base font-semibold ">Publication Year:</span>
+            <span className="text-base font-semibold ">Genre:</span>
           </label>
           <div className="w-full">
             <select
               className="select select-bordered focus:outline-none w-full"
               name="genre"
             >
-              <option value="">Publication Year</option>
+              <option value="">Select Genre</option>
               {genres &&
                 genres.length > 0 &&
                 genres.map((genre) => (
-                  <option key={genre} value={genre}>
+                  <option
+                    key={genre}
+                    value={genre}
+                    {...register('genre', {
+                      required: 'Genre is required',
+                    })}
+                  >
                     {genre}
                   </option>
                 ))}
             </select>
-            <p className="text-red-600">errors.publicationYear</p>
+            {errors.genre && (
+              <p className="text-red-600">{errors.genre?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
@@ -84,8 +150,13 @@ const AddNewBook = () => {
             <input
               type="date"
               className="input input-bordered w-full focus:outline-none"
+              {...register('publicationDate', {
+                required: 'Publication Date is required',
+              })}
             />
-            <p className="text-red-600 mt-3">errors.publicationDate</p>
+            {errors.publicationDate && (
+              <p className="text-red-600">{errors.publicationDate?.message}</p>
+            )}
           </div>
         </div>
         <div className="form-control w-full flex-row">
@@ -94,10 +165,16 @@ const AddNewBook = () => {
           </label>
           <div className="w-full">
             <input
+              accept="image/*"
               type="file"
               className="file-input input-bordered w-full focus:outline-none"
+              {...register('image', {
+                required: 'Image is required',
+              })}
             />
-            <p className="text-red-600 mt-3">errors.cover</p>
+            {errors.image && (
+              <p className="text-red-600">{errors.image?.message}</p>
+            )}
           </div>
         </div>
         <button className="w-full btn btn-neutral mt-2" type="submit">

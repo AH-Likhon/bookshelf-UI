@@ -26,6 +26,7 @@ const Navbar = () => {
     if (logOutData?.success) {
       dispatch(
         setLogOut({
+          _id: null,
           email: null,
           name: null,
           token: null,

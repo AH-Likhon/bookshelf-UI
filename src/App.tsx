@@ -18,9 +18,10 @@ function App() {
         try {
           const res = await refresh({});
           if (res.data.success) {
-            const { email, name } = res.data.data.user;
+            console.log(res.data.data.user);
+            const { email, name, _id } = res.data.data.user;
             const { accessToken } = res.data.data;
-            dispatch(setUser({ email, name, token: accessToken }));
+            dispatch(setUser({ _id, email, name, token: accessToken }));
           }
         } catch (error) {
           // console.error('Error refreshing access token:', error);

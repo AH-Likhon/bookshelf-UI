@@ -1,28 +1,26 @@
-import Card from '@/Components/Card';
 import { Link } from 'react-router-dom';
 
 const BookDetails = () => {
   return (
     <div className="py-10 md:py-20 px-12">
-      {/* <div className="w-1/2 mx-auto">
-        <Card />
-      </div> */}
       <div className="hero">
-        <div className="hero-content items-start flex-col lg:flex-row">
+        <div className="hero-content w-1/1 md:w-[55%] justify-between items-start flex-col lg:flex-row">
           <img
-            src="https://bookpresstheme.com/multiauthor/wp-content/uploads/2022/05/book-mockup13-600x795.png"
-            className="w-96 rounded-lg shadow-2xl mr-16 object-fill"
+            src={
+              'https://chapterone.qodeinteractive.com/wp-content/uploads/2019/07/product-8.jpg'
+            }
+            className="w-96 h-96 rounded-lg shadow-2xl  object-fill"
           />
           <div className="flex flex-col gap-2">
-            <h1 className="text-2xl md:text-3xl font-bold">Title: </h1>
-            <h1 className="text-lg lg:text-xl">Author: </h1>
-            <h1 className="text-lg lg:text-xl">Genre: </h1>
-            <h1 className="text-lg lg:text-xl">Published Date:</h1>
+            <p className="text-2xl md:text-3xl font-bold">Title: </p>
+            <p className="text-lg lg:text-xl">Author: </p>
+            <p className="text-lg lg:text-xl">Genre: </p>
+            <p className="text-lg lg:text-xl">Published Date:</p>
             <div className="w-full flex gap-2">
               <Link to={`/edit`}>
-                <button className="w-full btn btn-primary">Edit</button>
+                <button className="w-full btn btn-neutral">Edit</button>
               </Link>
-              <button className="w-1/2 btn btn-warning">Delete</button>
+              <button className="w-1/2 btn btn-neutral">Delete</button>
             </div>
           </div>
         </div>

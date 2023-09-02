@@ -26,13 +26,23 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload || { email: null, name: null, token: null };
+      state.user = action.payload || {
+        _id: null,
+        email: null,
+        name: null,
+        token: null,
+      };
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
     setLogOut: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload || { email: null, name: null, token: null };
+      state.user = action.payload || {
+        _id: null,
+        email: null,
+        name: null,
+        token: null,
+      };
     },
   },
   //   extraReducers: (builder) => {},

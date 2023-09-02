@@ -45,6 +45,14 @@ const api = createApi({
         method: 'POST',
       }),
     }),
+    addNewBook: builder.mutation({
+      query: (data) => ({
+        url: `/books`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['books'],
+    }),
     getAllBooks: builder.query({
       query: () => `/books`,
       providesTags: ['books'],
@@ -58,6 +66,7 @@ export const {
   useSignUpMutation,
   useLogInMutation,
   useLogOutMutation,
-  useGetAllBooksQuery,
   useRefreshTokenMutation,
+  useAddNewBookMutation,
+  useGetAllBooksQuery,
 } = api;

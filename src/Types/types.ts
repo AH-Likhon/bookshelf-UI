@@ -5,6 +5,7 @@ export type Inputs = {
 };
 
 export type User = {
+  _id: string | null;
   email: string | null;
   name: string | null;
   token: string | null;
@@ -16,12 +17,36 @@ export type IReview = {
 };
 
 export type IBook = {
-  _id: string;
-  image: string;
+  _id?: string;
+  image: string | null;
   title: string;
   author: string;
   genre: string;
   publicationDate: string;
-  seller: string;
-  reviews: IReview[];
+  seller: string | null;
+  reviews?: IReview[];
 };
+
+export const genres = [
+  'Fiction',
+  'Mystery',
+  'Science Fiction',
+  'Fantasy',
+  'Romance',
+  'Adventure',
+  'Historical Fiction',
+  'Biography',
+  'Self-Help',
+  'Poetry',
+  'Comedy',
+  'Drama',
+  'Young Adult',
+  'Graphic Novel',
+  'Cookbook',
+  'Science',
+  'History',
+  'Philosophy',
+  'Art',
+  'Sports',
+  'Business',
+];
