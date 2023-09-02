@@ -1,5 +1,11 @@
-import { useGetSingleBookQuery } from '@/Redux/api/apiSlice';
+import {
+  useDeleteBookMutation,
+  useGetSingleBookQuery,
+} from '@/Redux/api/apiSlice';
 import { Link, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -8,7 +14,42 @@ const BookDetails = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  // console.log('data:::', data?.data);
+  const [deleteBook, { data: deletedData, error: deletedError }] =
+    useDeleteBookMutation();
+
+  const handleDelete = (id: string) => {
+    const swalBtn = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
+      },
+      buttonsStyling: false,
+    });
+
+    swalBtn
+      .fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          deleteBook(id);
+        }
+      });
+  };
+
+  useEffect(() => {
+    if (deletedData?.success) {
+      toast.success(deletedData?.message);
+    } else if (deletedError) {
+      toast.error(deletedError?.data?.message);
+    }
+  }, [deletedData?.message, deletedData?.success, deletedError]);
 
   if (isLoading) {
     return (
@@ -41,7 +82,12 @@ const BookDetails = () => {
               <Link to={`/edit/${id}`}>
                 <button className="w-full btn btn-neutral">Edit</button>
               </Link>
-              <button className="w-1/2 btn btn-neutral">Delete</button>
+              <button
+                onClick={() => handleDelete(data?.data._id)}
+                className="w-1/2 btn btn-neutral"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

@@ -57,8 +57,6 @@ const EditBook = () => {
           data: processedData,
         };
 
-        console.log('if:::', options);
-
         updateBook(options);
       };
 
@@ -75,8 +73,6 @@ const EditBook = () => {
         id: book?.data?.id,
         data: processedData,
       };
-
-      console.log('else:::', options);
 
       updateBook(options);
     }

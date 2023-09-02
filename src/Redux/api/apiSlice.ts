@@ -90,4 +90,5 @@ export const {
   useGetAllBooksQuery,
   useGetSingleBookQuery,
   useUpdateSingleBookMutation,
+  useDeleteBookMutation,
 } = api;
