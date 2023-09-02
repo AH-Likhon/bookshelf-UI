@@ -57,6 +57,10 @@ const api = createApi({
       query: () => `/books`,
       providesTags: ['books'],
     }),
+    getSingleBook: builder.query({
+      query: (id) => `/books/${id}`,
+      providesTags: ['books'],
+    }),
   }),
 });
 
@@ -69,4 +73,5 @@ export const {
   useRefreshTokenMutation,
   useAddNewBookMutation,
   useGetAllBooksQuery,
+  useGetSingleBookQuery,
 } = api;

@@ -21,14 +21,6 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/books',
-        element: (
-          <PrivateRoute>
-            <Books />
-          </PrivateRoute>
-        ),
-      },
-      {
         path: '/login',
         element: <Login />,
       },
@@ -37,28 +29,44 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
       {
-        path: '/add-book',
-        element: <AddNewBook />,
+        path: '/books',
+        element: <Books />,
       },
       {
-        path: '/edit',
-        element: <EditBook />,
+        path: '/details/:id',
+        element: <BookDetails />,
       },
       {
-        path: '/details',
+        path: '/edit/:id',
         element: (
           <PrivateRoute>
-            <BookDetails />
+            <EditBook />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/add-book',
+        element: (
+          <PrivateRoute>
+            <AddNewBook />
           </PrivateRoute>
         ),
       },
       {
         path: '/wishlist',
-        element: <Wishlist />,
+        element: (
+          <PrivateRoute>
+            <Wishlist />
+          </PrivateRoute>
+        ),
       },
       {
         path: '/reading',
-        element: <CurrentlyReading />,
+        element: (
+          <PrivateRoute>
+            <CurrentlyReading />
+          </PrivateRoute>
+        ),
       },
     ],
   },

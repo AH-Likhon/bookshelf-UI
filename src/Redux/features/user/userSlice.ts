@@ -12,6 +12,7 @@ type InitialState = {
 
 const initialState: InitialState = {
   user: {
+    _id: null,
     email: null,
     name: null,
     token: null,

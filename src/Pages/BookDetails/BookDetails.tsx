@@ -1,6 +1,42 @@
-import { Link } from 'react-router-dom';
+import {
+  useGetSingleBookQuery,
+  useRefreshTokenMutation,
+} from '@/Redux/api/apiSlice';
+import { useAppDispatch } from '@/Redux/hooks';
+import { Link, useParams } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import refreshAccessToken from '@/Shared/reFreshAccess';
 
 const BookDetails = () => {
+  const { id } = useParams();
+
+  const { data, isLoading, refetch } = useGetSingleBookQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const dispatch = useAppDispatch();
+  const [refreshing, setRefreshing] = useState(true); // Use a state variable
+  const refreshToken = Cookies.get('refreshToken');
+  const [refresh] = useRefreshTokenMutation();
+
+  useEffect(() => {
+    refreshAccessToken(refreshToken, dispatch, refresh, setRefreshing);
+    if (!refreshing) {
+      refetch();
+    }
+  }, [dispatch, refresh, refreshToken, refetch, refreshing]);
+
+  // console.log('data:::', data?.data);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
     <div className="py-10 md:py-20 px-12">
       <div className="hero">
@@ -12,12 +48,16 @@ const BookDetails = () => {
             className="w-96 h-96 rounded-lg shadow-2xl  object-fill"
           />
           <div className="flex flex-col gap-2">
-            <p className="text-2xl md:text-3xl font-bold">Title: </p>
-            <p className="text-lg lg:text-xl">Author: </p>
-            <p className="text-lg lg:text-xl">Genre: </p>
-            <p className="text-lg lg:text-xl">Published Date:</p>
+            <p className="text-2xl md:text-3xl font-bold">
+              Title: {data?.data.title}
+            </p>
+            <p className="text-lg lg:text-xl">Author: {data?.data.author}</p>
+            <p className="text-lg lg:text-xl">Genre: {data?.data.genre}</p>
+            <p className="text-lg lg:text-xl">
+              Published: {data?.data.publicationDate}
+            </p>
             <div className="w-full flex gap-2">
-              <Link to={`/edit`}>
+              <Link to={`/edit/${id}`}>
                 <button className="w-full btn btn-neutral">Edit</button>
               </Link>
               <button className="w-1/2 btn btn-neutral">Delete</button>

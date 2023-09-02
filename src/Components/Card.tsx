@@ -24,7 +24,7 @@ const Card = ({ book }: { book: IBook }) => {
         <span>Genre: {book.genre}</span>
         <p>Publication Date: {book.publicationDate}</p>
         <div className="card-actions justify-end">
-          <Link to="/details">
+          <Link to={`/details/${book?._id}`}>
             <button className="btn btn-neutral">Details</button>
           </Link>
         </div>

@@ -18,7 +18,7 @@ function App() {
         try {
           const res = await refresh({});
           if (res.data.success) {
-            console.log(res.data.data.user);
+            // console.log(res.data.data.user);
             const { email, name, _id } = res.data.data.user;
             const { accessToken } = res.data.data;
             dispatch(setUser({ _id, email, name, token: accessToken }));

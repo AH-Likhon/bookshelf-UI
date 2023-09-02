@@ -10,7 +10,29 @@ const Wishlist = () => {
           <figure className="w-1/2 h-full">
             <img
               className="h-full object-fill"
-              src="http://dummyimage.com/212x100.png/dddddd/000000"
+              src={
+                'https://chapterone.qodeinteractive.com/wp-content/uploads/2019/07/product-8.jpg'
+              }
+              alt="Movie"
+            />
+          </figure>
+          <div className="w-1/2 card-body">
+            <p className="card-title">Title</p>
+            <span>Author:</span>
+            <span>Genre:</span>
+            <p>Publication Date:</p>
+            <div className="card-actions justify-end">
+              <button className="btn btn-neutral">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div className="card card-side bg-base-100 shadow-xl">
+          <figure className="w-1/2 h-full">
+            <img
+              className="h-full object-fill"
+              src={
+                'https://chapterone.qodeinteractive.com/wp-content/uploads/2019/07/product-8.jpg'
+              }
               alt="Movie"
             />
           </figure>
@@ -28,7 +50,9 @@ const Wishlist = () => {
           <figure className="w-1/2 h-full">
             <img
               className="h-full object-fill"
-              src="http://dummyimage.com/212x100.png/dddddd/000000"
+              src={
+                'https://chapterone.qodeinteractive.com/wp-content/uploads/2019/07/product-8.jpg'
+              }
               alt="Movie"
             />
           </figure>
@@ -46,25 +70,9 @@ const Wishlist = () => {
           <figure className="w-1/2 h-full">
             <img
               className="h-full object-fill"
-              src="http://dummyimage.com/212x100.png/dddddd/000000"
-              alt="Movie"
-            />
-          </figure>
-          <div className="w-1/2 card-body">
-            <h2 className="card-title">Title</h2>
-            <span>Author:</span>
-            <span>Genre:</span>
-            <p>Publication Date:</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-neutral">Remove</button>
-            </div>
-          </div>
-        </div>
-        <div className="card card-side bg-base-100 shadow-xl">
-          <figure className="w-1/2 h-full">
-            <img
-              className="h-full object-fill"
-              src="http://dummyimage.com/212x100.png/dddddd/000000"
+              src={
+                'https://chapterone.qodeinteractive.com/wp-content/uploads/2019/07/product-8.jpg'
+              }
               alt="Movie"
             />
           </figure>
