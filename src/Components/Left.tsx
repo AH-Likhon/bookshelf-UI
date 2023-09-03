@@ -1,4 +1,54 @@
+import { genres } from '@/Constants/constants';
+import { useGetAllBooksQuery } from '@/Redux/api/apiSlice';
+import { setBooksSuccess } from '@/Redux/features/books/bookSlice';
+import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
+import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
+
 const Left = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedPublicationDate, setSelectedPublicationDate] = useState('');
+
+  const dispatch = useAppDispatch();
+
+  const { books: updatedBooks } = useAppSelector((state) => state.books);
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGenre(e.target.value);
+  };
+
+  const handlePublicationDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    if (inputValue === '') {
+      setSelectedPublicationDate('');
+    } else {
+      const formattedPublicationDate = format(
+        new Date(inputValue),
+        'dd-MM-yyyy'
+      );
+      setSelectedPublicationDate(formattedPublicationDate);
+    }
+  };
+
+  const { data: books } = useGetAllBooksQuery({
+    searchTerm,
+    genre: selectedGenre,
+    publicationDate: selectedPublicationDate,
+  });
+
+  useEffect(() => {
+    if (books) {
+      dispatch(setBooksSuccess(books));
+    }
+  }, [books, dispatch]);
+
+  console.log('Book data', updatedBooks);
+
   return (
     <div className="w-1/1 md:w-1/3  lg:w-1/4 flex flex-col gap-2">
       <div className="form-control">
@@ -7,6 +57,8 @@ const Left = () => {
             type="text"
             placeholder="Search…"
             className="input input-bordered w-full focus:outline-none"
+            value={searchTerm}
+            onChange={handleSearchInputChange}
           />
           <button className="btn btn-square btn-neutral">
             <svg
@@ -29,17 +81,25 @@ const Left = () => {
       <select
         className="select select-bordered focus:outline-none w-full"
         name="genre"
+        value={selectedGenre}
+        onChange={handleGenreChange}
       >
         <option value="">All Genres</option>
-        <option value="">New</option>
+        {genres &&
+          genres.length > 0 &&
+          genres.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre}
+            </option>
+          ))}
       </select>
-      <select
-        className="select select-bordered focus:outline-none w-full"
-        name="genre"
-      >
-        <option value="">Publication Year</option>
-        <option value="">New</option>
-      </select>
+
+      <input
+        type="date"
+        className="input input-bordered w-full focus:outline-none"
+        defaultValue={format(new Date(), 'yyyy-MM-dd')}
+        onChange={handlePublicationDate}
+      />
     </div>
   );
 };

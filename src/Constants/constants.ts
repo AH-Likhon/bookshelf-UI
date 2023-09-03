@@ -50,3 +50,6 @@ export const genres = [
   'Sports',
   'Business',
 ];
+
+export const BookSearchableFields =
+  'title' || 'author' || 'genre' || 'publicationDate';

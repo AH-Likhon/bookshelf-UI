@@ -1,6 +1,6 @@
 import Card from '@/Components/Card';
 import { useGetAllBooksQuery } from '@/Redux/api/apiSlice';
-import { IBook } from '@/Types/types';
+import { IBook } from '@/Constants/constants';
 
 const Home = () => {
   const { data: books, isLoading } = useGetAllBooksQuery({

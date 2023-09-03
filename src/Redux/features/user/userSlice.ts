@@ -1,4 +1,4 @@
-import { User } from '@/Types/types';
+import { User } from '@/Constants/constants';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 // [x: string]: any;

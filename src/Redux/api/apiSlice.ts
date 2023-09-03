@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../store';
+import { BookSearchableFields } from '@/Constants/constants';
 
 const api = createApi({
   reducerPath: 'api',
@@ -54,7 +55,23 @@ const api = createApi({
       invalidatesTags: ['books'],
     }),
     getAllBooks: builder.query({
-      query: () => `/books`,
+      query: (params) => {
+        let url = '/books';
+
+        if (params.searchTerm) {
+          url += `?q=${params.searchTerm}`;
+        }
+
+        if (params.genre) {
+          url += `?genre=${params.genre}`;
+        }
+
+        if (params.publicationDate) {
+          url += `?publicationDate=${params.publicationDate}`;
+        }
+
+        return url;
+      },
       providesTags: ['books'],
     }),
     getSingleBook: builder.query({

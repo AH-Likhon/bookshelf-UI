@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Inputs, User } from '@/Types/types';
+import { Inputs, User } from '@/Constants/constants';
 import { useLogInMutation } from '@/Redux/api/apiSlice';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';

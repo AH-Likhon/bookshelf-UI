@@ -1,4 +1,4 @@
-import { IBook } from '@/Types/types';
+import { IBook } from '@/Constants/constants';
 import { Link } from 'react-router-dom';
 
 const Card = ({ book }: { book: IBook }) => {

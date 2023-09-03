@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAddNewBookMutation } from '@/Redux/api/apiSlice';
 import { useAppSelector } from '@/Redux/hooks';
-import { IBook, genres } from '@/Types/types';
+import { IBook, genres } from '@/Constants/constants';
 import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -14,7 +15,7 @@ const AddNewBook = () => {
     formState: { errors },
   } = useForm<IBook>();
 
-  const { user } = useAppSelector((state) => state.user);
+  const { user } = useAppSelector((state: { user: any }) => state.user);
 
   const [addNewBook, { data: addBookData, error: addBookError }] =
     useAddNewBookMutation();

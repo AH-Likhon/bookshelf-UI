@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useSignUpMutation } from '@/Redux/api/apiSlice';
-import { Inputs } from '@/Types/types';
+import { Inputs } from '@/Constants/constants';
 
 const SignUp = () => {
   const {

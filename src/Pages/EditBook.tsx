@@ -5,7 +5,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { format, parse } from 'date-fns';
-import { IBook, genres } from '@/Types/types';
+import { IBook, genres } from '@/Constants/constants';
 import { useAppSelector } from '@/Redux/hooks';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
