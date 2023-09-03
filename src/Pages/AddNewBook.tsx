@@ -21,7 +21,7 @@ const AddNewBook = () => {
     useAddNewBookMutation();
 
   const handleBookPublish: SubmitHandler<IBook> = async (data) => {
-    const { image, publicationDate } = data;
+    const { image, publicationDate, genre } = data;
 
     const formattedPublicationDate = format(
       new Date(publicationDate),
@@ -43,7 +43,6 @@ const AddNewBook = () => {
           seller: user._id,
         };
 
-        console.log(processedData);
         addNewBook(processedData);
       };
 
@@ -54,7 +53,7 @@ const AddNewBook = () => {
   useEffect(() => {
     if (addBookData?.success) {
       toast.success(addBookData.message);
-      console.log('SSs', addBookData);
+      // console.log('SSs', addBookData);
       reset();
     } else if (addBookError) {
       // console.log('Book rror::', addBookError);
@@ -119,7 +118,7 @@ const AddNewBook = () => {
             <span className="text-base font-semibold ">Genre:</span>
           </label>
           <div className="w-full">
-            <select
+            {/* <select
               className="select select-bordered focus:outline-none w-full"
               name="genre"
             >
@@ -137,6 +136,20 @@ const AddNewBook = () => {
                     {genre}
                   </option>
                 ))}
+            </select> */}
+
+            <select
+              className="select select-bordered focus:outline-none w-full"
+              {...register('genre', {
+                required: 'Genre is required',
+              })}
+            >
+              <option value="">Select Genre</option>
+              {genres.map((genre) => (
+                <option key={genre} value={genre}>
+                  {genre}
+                </option>
+              ))}
             </select>
             {errors.genre && (
               <p className="text-red-600">{errors.genre?.message}</p>
@@ -151,6 +164,7 @@ const AddNewBook = () => {
             <input
               type="date"
               className="input input-bordered w-full focus:outline-none"
+              defaultValue={format(new Date(), 'yyyy-MM-dd')}
               {...register('publicationDate', {
                 required: 'Publication Date is required',
               })}

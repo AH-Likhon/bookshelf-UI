@@ -12,7 +12,7 @@ const Left = () => {
 
   const dispatch = useAppDispatch();
 
-  const { books: updatedBooks } = useAppSelector((state) => state.books);
+  // const { books: updatedBooks } = useAppSelector((state) => state.books);
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -47,7 +47,7 @@ const Left = () => {
     }
   }, [books, dispatch]);
 
-  console.log('Book data', updatedBooks);
+  // console.log('Book data', updatedBooks);
 
   return (
     <div className="w-1/1 md:w-1/3  lg:w-1/4 flex flex-col gap-2">

@@ -63,20 +63,25 @@ const api = createApi({
         }
 
         if (params.genre) {
-          url += `?genre=${params.genre}`;
+          url += url.includes('?')
+            ? `&genre=${params.genre}`
+            : `?genre=${params.genre}`;
         }
 
         if (params.publicationDate) {
-          url += `?publicationDate=${params.publicationDate}`;
+          url += url.includes('?')
+            ? `&publicationDate=${params.publicationDate}`
+            : `?publicationDate=${params.publicationDate}`;
         }
 
         return url;
       },
       providesTags: ['books'],
     }),
+
     getSingleBook: builder.query({
       query: (id) => `/books/${id}`,
-      providesTags: ['books'],
+      providesTags: ['books', 'wishlist'],
     }),
     updateSingleBook: builder.mutation({
       query: ({ id, data }) => ({

@@ -24,6 +24,7 @@ export type IBook = {
   genre: string;
   publicationDate: string;
   seller: string | null;
+  status?: string | null;
   reviews?: IReview[];
 };
 
