@@ -2,13 +2,21 @@ import { useEffect } from 'react';
 import Main from './Layout/Main';
 import { useAppDispatch } from './Redux/hooks';
 import { setLoading, setUser } from './Redux/features/user/userSlice';
-import { useRefreshTokenMutation } from './Redux/api/apiSlice';
+import {
+  useGetAllBooksQuery,
+  useRefreshTokenMutation,
+} from './Redux/api/apiSlice';
 import Cookies from 'js-cookie';
+import { setBooksSuccess } from './Redux/features/books/bookSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const [refresh] = useRefreshTokenMutation();
   const refreshToken = Cookies.get('refreshToken');
+
+  const { data: books } = useGetAllBooksQuery({
+    refetchOnMountOrArgChange: true,
+  });
 
   useEffect(() => {
     const refreshAccessToken = async () => {
@@ -22,6 +30,8 @@ function App() {
             const { email, name, _id } = res.data.data.user;
             const { accessToken } = res.data.data;
             dispatch(setUser({ _id, email, name, token: accessToken }));
+
+            dispatch(setBooksSuccess(books));
           }
         } catch (error) {
           // console.error('Error refreshing access token:', error);
@@ -32,7 +42,7 @@ function App() {
     };
 
     refreshAccessToken();
-  }, [dispatch, refresh, refreshToken]);
+  }, [books, dispatch, refresh, refreshToken]);
 
   return (
     <div className="max-w-[1400px] mx-auto">

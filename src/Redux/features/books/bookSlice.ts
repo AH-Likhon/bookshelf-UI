@@ -4,6 +4,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 type InitialState = {
   books: IBook[];
   wishlist: IBook[];
+  readingList: IBook[];
   isLoading: boolean;
   isError: boolean;
   error: string | null;
@@ -11,7 +12,8 @@ type InitialState = {
 
 const initialState: InitialState = {
   books: [],
-  wishlist: [],
+  wishlist: JSON.parse(localStorage.getItem('wishlist') || '[]'),
+  readingList: JSON.parse(localStorage.getItem('readingList') || '[]'),
   isLoading: false,
   isError: false,
   error: null,
@@ -34,25 +36,40 @@ const bookSlice = createSlice({
       state.isError = true;
       state.error = action.payload;
     },
-    setWishlist: (state, action: PayloadAction<IBook>) => {
+    addToWishlist: (state, action: PayloadAction<IBook>) => {
       const existsBook = state.wishlist.find(
         (book) => book._id === action.payload?._id
       );
       if (!existsBook) {
         state.wishlist.push(action.payload);
-        state.isError = false;
-        state.error = null;
-        state.isLoading = false;
-      } else if (existsBook) {
-        state.isError = true;
-        state.error = 'The book already exists in the wishlist❗';
-        state.isLoading = true;
+        localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
+      }
+    },
+    removeFromWishlist: (state, action: PayloadAction<IBook>) => {
+      state.wishlist = state.wishlist.filter(
+        (product) => product._id !== action.payload._id
+      );
+      localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
+    },
+    addToReadinglist: (state, action: PayloadAction<IBook>) => {
+      const existsBook = state.readingList.find(
+        (book) => book._id === action.payload?._id
+      );
+      if (!existsBook) {
+        state.readingList.push(action.payload);
+        localStorage.setItem('readingList', JSON.stringify(state.readingList));
       }
     },
   },
 });
 
-export const { setBooksStart, setBooksFailure, setBooksSuccess, setWishlist } =
-  bookSlice.actions;
+export const {
+  setBooksStart,
+  setBooksFailure,
+  setBooksSuccess,
+  addToWishlist,
+  removeFromWishlist,
+  addToReadinglist,
+} = bookSlice.actions;
 
 export default bookSlice.reducer;

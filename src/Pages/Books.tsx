@@ -1,15 +1,12 @@
 import Card from '@/Components/Card';
 import Left from '@/Components/Left';
-import { useGetAllBooksQuery } from '@/Redux/api/apiSlice';
 import { IBook } from '@/Constants/constants';
 import { useAppSelector } from '@/Redux/hooks';
 
 const Books = () => {
-  const { data: books, isLoading } = useGetAllBooksQuery({
-    refetchOnMountOrArgChange: true,
-  });
-
-  const { books: updatedBooks } = useAppSelector((state) => state.books);
+  const { books: updatedBooks, isLoading } = useAppSelector(
+    (state) => state.books
+  );
 
   return (
     <div className="w-full py-10 md:py-20 px-12 ">

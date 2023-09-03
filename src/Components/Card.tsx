@@ -1,34 +1,53 @@
 import { IBook } from '@/Constants/constants';
 import { Link } from 'react-router-dom';
 import { AiOutlineHeart } from 'react-icons/ai';
+import { VscDiffAdded } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
-import { setWishlist } from '@/Redux/features/books/bookSlice';
+import {
+  addToReadinglist,
+  addToWishlist,
+  removeFromWishlist,
+} from '@/Redux/features/books/bookSlice';
 import { useGetSingleBookQuery } from '@/Redux/api/apiSlice';
 import { toast } from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-const Card = ({ book }: { book: IBook }) => {
-  // console.log(book?.image);
+const Card = ({ book, isWishlist }: { book: IBook; isWishlist?: boolean }) => {
+  // console.log(isWishlist);
   const dispatch = useAppDispatch();
-  const { data: bookData, refetch } = useGetSingleBookQuery(book._id, {
+  const { data: bookData } = useGetSingleBookQuery(book._id, {
     refetchOnMountOrArgChange: true,
   });
 
-  const { wishlist, isError, error, isLoading } = useAppSelector(
-    (state) => state.books
-  );
+  const { user } = useAppSelector((state) => state.user);
 
   const [hasErrorDisplayed, setHasErrorDisplayed] = useState(false);
 
   const handleWishlist = () => {
     if (bookData?.data) {
-      dispatch(setWishlist(bookData.data));
+      dispatch(addToWishlist(bookData.data));
       setHasErrorDisplayed(true);
     }
 
     if (hasErrorDisplayed) {
-      toast.error('The book already exists in the wishlist❗');
+      toast.error('Already exists in the wishlist❗');
     }
+  };
+
+  const handleAddReadingList = () => {
+    if (bookData?.data) {
+      dispatch(addToReadinglist(bookData.data));
+      setHasErrorDisplayed(true);
+    }
+
+    if (hasErrorDisplayed) {
+      toast.error('Already exists in the reading list❗');
+    }
+  };
+
+  const handleRemoveFromWishlist = () => {
+    dispatch(removeFromWishlist(bookData.data));
+    toast.success('Successfully removed from the wishlist❕');
   };
 
   // const { books: updatedBooks } = useAppSelector((state) => state.books);
@@ -52,16 +71,43 @@ const Card = ({ book }: { book: IBook }) => {
         <span>Author: {book.author}</span>
         <span>Genre: {book.genre}</span>
         <p>Publication Date: {book.publicationDate}</p>
-        <div className="card-actions items-center justify-between">
-          <div className="tooltip tooltip-right" data-tip="Wishlist">
-            <AiOutlineHeart
-              className="cursor-pointer"
-              onClick={handleWishlist}
-            />
-          </div>
-          <Link to={`/details/${book?._id}`}>
-            <button className="btn btn-neutral">Details</button>
-          </Link>
+        <div
+          className={`card-actions items-center ${
+            user?.email ? 'justify-between' : 'justify-end'
+          }`}
+        >
+          {user?.email &&
+            (isWishlist ? (
+              <div
+                className="tooltip tooltip-right"
+                data-tip="Add To Reading List"
+              >
+                <VscDiffAdded
+                  className="cursor-pointer"
+                  onClick={handleAddReadingList}
+                />
+              </div>
+            ) : (
+              <div className="tooltip tooltip-right" data-tip="Wishlist">
+                <AiOutlineHeart
+                  className="cursor-pointer"
+                  onClick={handleWishlist}
+                />
+              </div>
+            ))}
+
+          {isWishlist ? (
+            <button
+              onClick={handleRemoveFromWishlist}
+              className="btn btn-neutral"
+            >
+              Remove
+            </button>
+          ) : (
+            <Link to={`/details/${book?._id}`}>
+              <button className="btn btn-neutral">Details</button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 import Card from '@/Components/Card';
-import { useGetAllBooksQuery } from '@/Redux/api/apiSlice';
 import { IBook } from '@/Constants/constants';
+import { useAppSelector } from '@/Redux/hooks';
 
 const Home = () => {
-  const { data: books, isLoading } = useGetAllBooksQuery({
-    refetchOnMountOrArgChange: true,
-  });
+  const { books: updatedBooks, isLoading } = useAppSelector(
+    (state) => state.books
+  );
 
   if (isLoading) {
     return (
@@ -21,9 +21,12 @@ const Home = () => {
         Feature Books
       </h2>
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {books?.data.slice(0, 10).map((book: IBook) => (
-          <Card key={book._id} book={book} />
-        ))}
+        {!isLoading &&
+          updatedBooks?.data &&
+          updatedBooks?.data.length > 0 &&
+          updatedBooks?.data
+            .slice(0, 10)
+            .map((book: IBook) => <Card key={book._id} book={book} />)}
       </div>
     </div>
   );
