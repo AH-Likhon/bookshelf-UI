@@ -89,7 +89,7 @@ const CurrentlyReading = () => {
       )}
 
       {readingList && readingList.length === 0 && (
-        <div className="w-1/1 md:w-2/3 lg:w-3/4 h-screen">
+        <div className="w-1/1 h-screen">
           <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl">
             Your readingL list is empty❗😞
           </h2>
