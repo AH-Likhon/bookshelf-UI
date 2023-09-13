@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IBook } from '@/Constants/constants';
 import { Link } from 'react-router-dom';
 import { AiOutlineHeart } from 'react-icons/ai';
@@ -19,7 +20,7 @@ const Card = ({ book, isWishlist }: { book: IBook; isWishlist?: boolean }) => {
     refetchOnMountOrArgChange: true,
   });
 
-  const { user } = useAppSelector((state) => state.user);
+  const { user } = useAppSelector((state: { user: any }) => state.user);
 
   const [hasErrorDisplayed, setHasErrorDisplayed] = useState(false);
 

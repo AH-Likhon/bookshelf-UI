@@ -60,6 +60,15 @@ const bookSlice = createSlice({
         localStorage.setItem('readingList', JSON.stringify(state.readingList));
       }
     },
+    updateReadingList: (state, action: PayloadAction<IBook>) => {
+      const existsBook = state.readingList.find(
+        (book) => book._id === action.payload?._id
+      );
+      if (existsBook) {
+        existsBook.status = action.payload.status;
+        localStorage.setItem('readingList', JSON.stringify(state.readingList));
+      }
+    },
   },
 });
 
@@ -70,6 +79,7 @@ export const {
   addToWishlist,
   removeFromWishlist,
   addToReadinglist,
+  updateReadingList,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;
