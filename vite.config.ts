@@ -5,7 +5,6 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/bookshelf-UI/',
   // server: {
   //   port: 3000,
   // },
