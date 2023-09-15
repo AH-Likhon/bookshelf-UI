@@ -39,8 +39,6 @@ const Card = ({ book, isWishlist }: { book: IBook; isWishlist?: boolean }) => {
     if (bookData?.data) {
       dispatch(addToReadinglist(bookData.data));
       setHasErrorDisplayed(true);
-      toast.success('Successfully added in the current reading list❕');
-      dispatch(removeFromWishlist(bookData.data));
     }
 
     if (hasErrorDisplayed) {

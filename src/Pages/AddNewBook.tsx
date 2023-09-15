@@ -21,7 +21,7 @@ const AddNewBook = () => {
     useAddNewBookMutation();
 
   const handleBookPublish: SubmitHandler<IBook> = async (data) => {
-    const { image, publicationDate } = data;
+    const { image, publicationDate, genre } = data;
 
     const formattedPublicationDate = format(
       new Date(publicationDate),

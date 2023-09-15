@@ -1,38 +1,21 @@
-/* eslint-disable no-unsafe-optional-chaining */
 import {
   useDeleteBookMutation,
   useGetSingleBookQuery,
-  useUpdateSingleBookMutation,
 } from '@/Redux/api/apiSlice';
 import { Link, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { IReview } from '@/Constants/constants';
 
 const BookDetails = () => {
   const { id } = useParams();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-
-    formState: { errors },
-  } = useForm<IReview>();
-
-  const { data: book, isLoading } = useGetSingleBookQuery(id, {
+  const { data, isLoading } = useGetSingleBookQuery(id, {
     refetchOnMountOrArgChange: true,
   });
 
-  const [updateBook, { data: updateBookData, error: updateBookError }] =
-    useUpdateSingleBookMutation();
-
   const [deleteBook, { data: deletedData, error: deletedError }] =
     useDeleteBookMutation();
-
-  // console.log(book?.data);
 
   const handleDelete = (id: string) => {
     const swalBtn = Swal.mixin({
@@ -60,42 +43,13 @@ const BookDetails = () => {
       });
   };
 
-  const handleAddReviews: SubmitHandler<IReview> = async (review) => {
-    const newBook = {
-      ...book?.data,
-
-      reviews: [...book?.data?.reviews, review],
-    };
-    const options = {
-      id: book?.data?.id,
-      data: newBook,
-    };
-
-    updateBook(options);
-  };
-
   useEffect(() => {
     if (deletedData?.success) {
       toast.success(deletedData?.message);
     } else if (deletedError) {
       toast.error(deletedError?.data?.message);
     }
-
-    if (updateBookData?.success) {
-      toast.success('Successfully added the review😃');
-      reset();
-    } else if (updateBookError) {
-      toast.error(updateBookError?.data?.message);
-    }
-  }, [
-    deletedData?.message,
-    deletedData?.success,
-    deletedError,
-    reset,
-    updateBookData?.message,
-    updateBookData?.success,
-    updateBookError,
-  ]);
+  }, [deletedData?.message, deletedData?.success, deletedError]);
 
   if (isLoading) {
     return (
@@ -117,19 +71,19 @@ const BookDetails = () => {
           />
           <div className="flex flex-col gap-2">
             <p className="text-2xl md:text-3xl font-bold">
-              Title: {book?.data.title}
+              Title: {data?.data.title}
             </p>
-            <p className="text-lg lg:text-xl">Author: {book?.data.author}</p>
-            <p className="text-lg lg:text-xl">Genre: {book?.data.genre}</p>
+            <p className="text-lg lg:text-xl">Author: {data?.data.author}</p>
+            <p className="text-lg lg:text-xl">Genre: {data?.data.genre}</p>
             <p className="text-lg lg:text-xl">
-              Published: {book?.data.publicationDate}
+              Published: {data?.data.publicationDate}
             </p>
             <div className="w-full flex gap-2">
               <Link to={`/edit/${id}`}>
                 <button className="w-full btn btn-neutral">Edit</button>
               </Link>
               <button
-                onClick={() => handleDelete(book?.data._id)}
+                onClick={() => handleDelete(data?.data._id)}
                 className="w-1/2 btn btn-neutral"
               >
                 Delete
@@ -139,47 +93,20 @@ const BookDetails = () => {
         </div>
       </div>
       <div className=" mt-12 w-1/2 mx-auto">
-        <form
-          className="w-1/1 input-group mb-4"
-          onSubmit={handleSubmit(handleAddReviews)}
-        >
-          <select
-            className="select select-bordered focus:outline-none"
-            {...register(`rating`, {
-              valueAsNumber: true,
-              required: 'Rating is required',
-            })}
-          >
-            <option value={0}>Ratings</option>
-            <option value={5}>5</option>
-            <option value={4}>4</option>
-            <option value={3}>3</option>
-            <option value={2}>2</option>
-            <option value={1}>1</option>
-          </select>
-
+        <div className="input-group mb-4">
           <input
             type="text"
             placeholder="Add a comment..."
             className="input input-bordered w-full focus:outline-none"
-            {...register(`reviewText`, {
-              required: 'Review is required',
-            })}
           />
-          <button type="submit" className="btn btn-square btn-neutral">
-            Add
-          </button>
-        </form>
+          <button className="btn btn-square btn-neutral">Add</button>
+        </div>
 
         <h2 className="text-2xl font-bold">User Reviews</h2>
-
-        {book?.data?.reviews &&
-          book?.data?.reviews.map((review: IReview) => (
-            <div className="flex gap-4 mt-2">
-              <h2>User: {book?.data?.seller?.name}</h2>
-              <h2>comment: {review.reviewText} </h2>
-            </div>
-          ))}
+        <div className="flex gap-4 mt-2">
+          <h2>User: </h2>
+          <h2>comment: </h2>
+        </div>
       </div>
     </div>
   );
