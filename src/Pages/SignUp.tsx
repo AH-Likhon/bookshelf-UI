@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useSignUpMutation } from '@/Redux/api/apiSlice';
 import { Inputs } from '@/Constants/constants';
+import { isFetchBaseQueryError } from '@/Redux/hooks';
 
 const SignUp = () => {
   const {
@@ -30,6 +31,14 @@ const SignUp = () => {
       toast.error(signUpError?.data.message);
     }
   }, [reset, navigate, signUpData?.message, signUpData?.success, signUpError]);
+
+  if (isFetchBaseQueryError(signUpError)) {
+    return (
+      <div className="w-1/1 h-screen flex items-center justify-center">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="py-10 md:py-[86px] px-12">

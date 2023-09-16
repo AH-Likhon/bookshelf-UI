@@ -1,6 +1,10 @@
 import { useLogOutMutation } from '@/Redux/api/apiSlice';
 import { setLogOut } from '@/Redux/features/user/userSlice';
-import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
+import {
+  isFetchBaseQueryError,
+  useAppDispatch,
+  useAppSelector,
+} from '@/Redux/hooks';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
@@ -34,7 +38,7 @@ const Navbar = () => {
       );
       toast.success(logOutData.message);
       navigate(from, { replace: true });
-    } else if (logOutError) {
+    } else if (isFetchBaseQueryError(logOutError) && logOutError) {
       toast.error(logOutError?.data?.message);
     }
   }, [
@@ -45,6 +49,14 @@ const Navbar = () => {
     navigate,
     from,
   ]);
+
+  // if (isFetchBaseQueryError(logOutError)) {
+  //   return (
+  //     <div className="w-1/1 h-screen flex items-center justify-center">
+  //       <span className="loading loading-ring loading-lg"></span>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="navbar flex justify-between bg-neutral text-neutral-content">
@@ -179,6 +191,7 @@ const Navbar = () => {
               <li onClick={handleLogOut} className="font-medium text-base">
                 <p className="hover:text-neutral-content">Logout</p>
               </li>
+
               <li className="font-medium text-base">
                 <p className="hover:text-neutral-content">{user?.name}</p>
               </li>

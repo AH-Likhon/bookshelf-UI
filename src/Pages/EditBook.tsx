@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { format, parse } from 'date-fns';
 import { IBook, genres } from '@/Constants/constants';
-import { useAppSelector } from '@/Redux/hooks';
+import { isFetchBaseQueryError, useAppSelector } from '@/Redux/hooks';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -17,13 +17,16 @@ const EditBook = () => {
     register,
     handleSubmit,
     reset,
-
     formState: { errors },
   } = useForm<IBook>();
 
   const { user } = useAppSelector((state) => state.user);
 
-  const { data: book, isLoading } = useGetSingleBookQuery(id, {
+  const {
+    data: book,
+    isLoading,
+    error,
+  } = useGetSingleBookQuery(id, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -96,7 +99,7 @@ const EditBook = () => {
     }
   }, [reset, updateBookData, updateBookError]);
 
-  if (isLoading) {
+  if (isLoading || isFetchBaseQueryError(error)) {
     return (
       <div className="h-screen flex items-center justify-center">
         <span className="loading loading-ring loading-lg"></span>

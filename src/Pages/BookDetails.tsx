@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IReview } from '@/Constants/constants';
-import { useAppSelector } from '@/Redux/hooks';
+import { isFetchBaseQueryError, useAppSelector } from '@/Redux/hooks';
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -19,7 +19,11 @@ const BookDetails = () => {
   const { register, handleSubmit, reset } = useForm<IReview>();
   const { user } = useAppSelector((state: { user: any }) => state.user);
 
-  const { data: book, isLoading } = useGetSingleBookQuery(id, {
+  const {
+    data: book,
+    isLoading,
+    error,
+  } = useGetSingleBookQuery(id, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -94,7 +98,7 @@ const BookDetails = () => {
     updateBookError,
   ]);
 
-  if (isLoading) {
+  if (isLoading || isFetchBaseQueryError(error)) {
     return (
       <div className="h-screen flex items-center justify-center">
         <span className="loading loading-ring loading-lg"></span>

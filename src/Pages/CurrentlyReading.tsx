@@ -2,7 +2,11 @@
 import { IBook } from '@/Constants/constants';
 import { useUpdateSingleBookMutation } from '@/Redux/api/apiSlice';
 import { updateReadingList } from '@/Redux/features/books/bookSlice';
-import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
+import {
+  isFetchBaseQueryError,
+  useAppDispatch,
+  useAppSelector,
+} from '@/Redux/hooks';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
@@ -34,6 +38,14 @@ const CurrentlyReading = () => {
       toast.error(updateBookError?.data?.message);
     }
   }, [updateBookData, updateBookError]);
+
+  if (isFetchBaseQueryError(updateBookError)) {
+    return (
+      <div className="w-1/1 h-screen flex items-center justify-center">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="py-10 md:py-20 px-12">
