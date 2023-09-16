@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { useEffect } from 'react';
 import Main from './Layout/Main';
 import { useAppDispatch } from './Redux/hooks';
@@ -14,7 +15,7 @@ function App() {
   const [refresh] = useRefreshTokenMutation();
   const refreshToken = Cookies.get('refreshToken');
 
-  const { data: books } = useGetAllBooksQuery({
+  const { data: books, error } = useGetAllBooksQuery({
     refetchOnMountOrArgChange: true,
   });
 
@@ -25,10 +26,10 @@ function App() {
 
         try {
           const res = await refresh({});
-          if (res.data.success) {
+          if (res?.data?.success) {
             // console.log(res.data.data.user);
-            const { email, name, _id } = res.data.data.user;
-            const { accessToken } = res.data.data;
+            const { email, name, _id } = res?.data?.data?.user;
+            const { accessToken } = res?.data?.data;
             dispatch(setUser({ _id, email, name, token: accessToken }));
 
             dispatch(setBooksSuccess(books));
@@ -43,6 +44,14 @@ function App() {
 
     refreshAccessToken();
   }, [books, dispatch, refresh, refreshToken]);
+
+  if (error) {
+    return (
+      <div className="w-1/1 h-screen flex items-center justify-center">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1400px] mx-auto">
