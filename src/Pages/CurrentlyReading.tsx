@@ -1,118 +1,102 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IBook } from '@/Constants/constants';
-import { Link } from 'react-router-dom';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { VscDiffAdded } from 'react-icons/vsc';
+import { useUpdateSingleBookMutation } from '@/Redux/api/apiSlice';
+import { updateReadingList } from '@/Redux/features/books/bookSlice';
 import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
-import {
-  addToReadinglist,
-  addToWishlist,
-  removeFromWishlist,
-} from '@/Redux/features/books/bookSlice';
-import { useGetSingleBookQuery } from '@/Redux/api/apiSlice';
-import { toast } from 'react-hot-toast';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
-const Card = ({ book, isWishlist }: { book: IBook; isWishlist?: boolean }) => {
-  // console.log(isWishlist);
+const CurrentlyReading = () => {
+  const { readingList } = useAppSelector((state) => state.books);
   const dispatch = useAppDispatch();
-  const { data: bookData } = useGetSingleBookQuery(book._id, {
-    refetchOnMountOrArgChange: true,
-  });
 
-  const { user } = useAppSelector((state: { user: any }) => state.user);
+  const [updateBook, { data: updateBookData, error: updateBookError }] =
+    useUpdateSingleBookMutation();
 
-  const [hasErrorDisplayed, setHasErrorDisplayed] = useState(false);
+  const handleChangeStatus = (event: any, book: IBook) => {
+    const { value } = event.target;
 
-  const handleWishlist = () => {
-    if (bookData?.data) {
-      dispatch(addToWishlist(bookData.data));
-      setHasErrorDisplayed(true);
-    }
+    const newBookStatus = { ...book, status: value };
 
-    if (hasErrorDisplayed) {
-      toast.error('Already exists in the wishlist❗');
-    }
+    // console.log(newBookStatus);
+    const options = {
+      id: newBookStatus._id,
+      data: newBookStatus,
+    };
+    dispatch(updateReadingList(newBookStatus));
+    updateBook(options);
   };
 
-  const handleAddReadingList = () => {
-    if (bookData?.data) {
-      dispatch(addToReadinglist(bookData.data));
-      setHasErrorDisplayed(true);
+  useEffect(() => {
+    if (updateBookData?.success) {
+      toast.success(updateBookData?.message);
+    } else if (updateBookError) {
+      toast.error(updateBookError?.data?.message);
     }
-
-    if (hasErrorDisplayed) {
-      toast.error('Already exists in the reading list❗');
-    }
-  };
-
-  const handleRemoveFromWishlist = () => {
-    dispatch(removeFromWishlist(bookData.data));
-    toast.success('Successfully removed from the wishlist❕');
-  };
-
-  // const { books: updatedBooks } = useAppSelector((state) => state.books);
+  }, [updateBookData, updateBookError]);
 
   return (
-    <div className="card card-side bg-base-100 shadow-xl">
-      <figure className="w-1/2 h-full">
-        <img
-          src={
-            'https://chapterone.qodeinteractive.com/wp-content/uploads/2019/07/product-8.jpg'
-          }
-          alt={book?.title}
-        />
-      </figure>
+    <div className="py-10 md:py-20 px-12">
+      <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl mb-12">
+        Currently Reading
+      </h2>
 
-      <div className="w-1/2 card-body py-3 px-[10px]">
-        {/* <h2 className="card-title break-words	">{book?.title}</h2> */}
-        <p className="break-words font-semibold text-base md:text-lg">
-          {book?.title}
-        </p>
-        <span>Author: {book.author}</span>
-        <span>Genre: {book.genre}</span>
-        <p>Publication Date: {book.publicationDate}</p>
-        <div
-          className={`card-actions items-center ${
-            user?.email ? 'justify-between' : 'justify-end'
-          }`}
-        >
-          {user?.email &&
-            (isWishlist ? (
+      {readingList && readingList.length > 0 && (
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-2">
+          {readingList &&
+            readingList.length > 0 &&
+            readingList?.map((book: IBook) => (
               <div
-                className="tooltip tooltip-right"
-                data-tip="Add To Reading List"
+                key={book._id}
+                className="card card-side bg-base-100 shadow-xl"
               >
-                <VscDiffAdded
-                  className="cursor-pointer"
-                  onClick={handleAddReadingList}
-                />
-              </div>
-            ) : (
-              <div className="tooltip tooltip-right" data-tip="Wishlist">
-                <AiOutlineHeart
-                  className="cursor-pointer"
-                  onClick={handleWishlist}
-                />
+                <figure className="w-1/2 h-full">
+                  <img
+                    className="h-full object-fill"
+                    src="http://dummyimage.com/212x100.png/dddddd/000000"
+                    alt={book.title}
+                  />
+                </figure>
+                <div className="w-1/2 card-body px-6 py-10">
+                  {/* <h2 className="card-title">{book.title}</h2> */}
+                  <p className="break-words font-semibold text-base md:text-lg">
+                    {book?.title}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Author:</span> {book.author}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Genre:</span> {book.genre}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Publication Date:</span>{' '}
+                    {book.publicationDate}
+                  </p>
+                  <span className="font-semibold">
+                    Reading Status:
+                    <small className="text-red-500"> {book.status}</small>
+                  </span>
+                  <select onChange={(event) => handleChangeStatus(event, book)}>
+                    <option value="">Change the reading status</option>
+                    <option value="Not Started">Not Started</option>
+                    <option value="Reading">Reading</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
               </div>
             ))}
-
-          {isWishlist ? (
-            <button
-              onClick={handleRemoveFromWishlist}
-              className="btn btn-neutral"
-            >
-              Remove
-            </button>
-          ) : (
-            <Link to={`/details/${book?._id}`}>
-              <button className="btn btn-neutral">Details</button>
-            </Link>
-          )}
         </div>
-      </div>
+      )}
+
+      {readingList && readingList.length === 0 && (
+        <div className="w-1/1 h-screen">
+          <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl">
+            Your readingL list is empty❗😞
+          </h2>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Card;
+export default CurrentlyReading;

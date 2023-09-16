@@ -21,7 +21,7 @@ const AddNewBook = () => {
     useAddNewBookMutation();
 
   const handleBookPublish: SubmitHandler<IBook> = async (data) => {
-    const { image, publicationDate, genre } = data;
+    const { image, publicationDate } = data;
 
     const formattedPublicationDate = format(
       new Date(publicationDate),
@@ -118,26 +118,6 @@ const AddNewBook = () => {
             <span className="text-base font-semibold ">Genre:</span>
           </label>
           <div className="w-full">
-            {/* <select
-              className="select select-bordered focus:outline-none w-full"
-              name="genre"
-            >
-              <option value="">Select Genre</option>
-              {genres &&
-                genres.length > 0 &&
-                genres.map((genre) => (
-                  <option
-                    key={genre}
-                    value={genre}
-                    {...register('genre', {
-                      required: 'Genre is required',
-                    })}
-                  >
-                    {genre}
-                  </option>
-                ))}
-            </select> */}
-
             <select
               className="select select-bordered focus:outline-none w-full"
               {...register('genre', {

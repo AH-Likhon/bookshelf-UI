@@ -5,8 +5,8 @@ import { RootState } from '../store';
 const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    // baseUrl: 'https://bookshelf-backend11.vercel.app/api/v1',
-    baseUrl: 'http://localhost:5000/api/v1',
+    baseUrl: 'https://bookshelf-backend11.vercel.app/api/v1',
+    // baseUrl: 'http://localhost:5000/api/v1',
     prepareHeaders: (headers, { getState, endpoint }) => {
       const user = (getState() as RootState).user;
 

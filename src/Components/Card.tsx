@@ -25,9 +25,10 @@ const Card = ({ book, isWishlist }: { book: IBook; isWishlist?: boolean }) => {
   const [hasErrorDisplayed, setHasErrorDisplayed] = useState(false);
 
   const handleWishlist = () => {
-    if (bookData?.data) {
+    if (bookData?.data && !hasErrorDisplayed) {
       dispatch(addToWishlist(bookData.data));
       setHasErrorDisplayed(true);
+      toast.success('Successfully added in the wishlist❕');
     }
 
     if (hasErrorDisplayed) {
@@ -37,8 +38,10 @@ const Card = ({ book, isWishlist }: { book: IBook; isWishlist?: boolean }) => {
 
   const handleAddReadingList = () => {
     if (bookData?.data) {
-      dispatch(addToReadinglist(bookData.data));
+      dispatch(addToReadinglist(bookData?.data));
       setHasErrorDisplayed(true);
+      toast.success('Successfully added in the current reading list❕');
+      dispatch(removeFromWishlist(bookData.data));
     }
 
     if (hasErrorDisplayed) {
@@ -47,7 +50,7 @@ const Card = ({ book, isWishlist }: { book: IBook; isWishlist?: boolean }) => {
   };
 
   const handleRemoveFromWishlist = () => {
-    dispatch(removeFromWishlist(bookData.data));
+    dispatch(removeFromWishlist(bookData?.data));
     toast.success('Successfully removed from the wishlist❕');
   };
 
