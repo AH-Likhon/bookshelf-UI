@@ -27,7 +27,8 @@ const SignUp = () => {
       reset();
       navigate('/login');
     } else if (signUpError) {
-      toast.error(signUpError?.data.message);
+      // toast.error(signUpError?.data.message);
+      toast.error('Failed to signup!');
     }
   }, [reset, navigate, signUpData?.message, signUpData?.success, signUpError]);
 

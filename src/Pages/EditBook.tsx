@@ -22,11 +22,7 @@ const EditBook = () => {
 
   const { user } = useAppSelector((state) => state.user);
 
-  const {
-    data: book,
-    isLoading,
-    error,
-  } = useGetSingleBookQuery(id, {
+  const { data: book, isLoading } = useGetSingleBookQuery(id, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -95,7 +91,8 @@ const EditBook = () => {
       toast.success(updateBookData?.message);
       reset();
     } else if (updateBookError) {
-      toast.error(updateBookError?.data?.message);
+      // toast.error(updateBookError?.data?.message);
+      toast.error('Failed to edit the book!');
     }
   }, [reset, updateBookData, updateBookError]);
 

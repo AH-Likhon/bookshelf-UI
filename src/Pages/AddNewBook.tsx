@@ -57,7 +57,8 @@ const AddNewBook = () => {
       reset();
     } else if (addBookError) {
       // console.log('Book rror::', addBookError);
-      toast.error(addBookError?.data?.message);
+      // toast.error(addBookError?.data?.message);
+      toast.error('Failed to add book!');
     }
   }, [
     addBookData,

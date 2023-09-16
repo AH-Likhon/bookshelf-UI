@@ -3,7 +3,7 @@ import { setLogOut } from '@/Redux/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [clicked, setClicked] = useState(false);
@@ -12,8 +12,9 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/';
+  const from = location?.state?.from?.pathname || '/';
 
   const [logOut, { data: logOutData, error: logOutError }] =
     useLogOutMutation();
@@ -35,7 +36,8 @@ const Navbar = () => {
       toast.success(logOutData.message);
       navigate(from, { replace: true });
     } else if (logOutError) {
-      toast.error(logOutError?.data?.message);
+      // toast.error(logOutError?.data?.message);
+      toast.error('Failed to logout!');
     }
   }, [
     dispatch,

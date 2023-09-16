@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Inputs, User } from '@/Constants/constants';
@@ -26,7 +27,7 @@ const Login = () => {
 
   const handleLogIn: SubmitHandler<Inputs> = async (data) => {
     try {
-      const res = await logIn(data);
+      const res: any = await logIn(data);
       if (res?.data?.success) {
         setUserData({
           _id: res?.data?.data?.user?._id,
@@ -35,8 +36,8 @@ const Login = () => {
           token: res?.data?.data?.accessToken,
         });
       }
-    } catch (error) {
-      toast.error(loginError?.data.message);
+    } catch (error: any) {
+      toast.error(error?.message);
     }
   };
 
@@ -47,7 +48,8 @@ const Login = () => {
       toast.success(logInData.message);
       navigate(from, { replace: true });
     } else if (loginError) {
-      toast.error(loginError?.data?.message);
+      // toast.error(loginError?.data?.message);
+      toast.error('Failed to Login!');
     }
   }, [
     dispatch,

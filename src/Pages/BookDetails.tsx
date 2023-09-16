@@ -19,11 +19,7 @@ const BookDetails = () => {
   const { register, handleSubmit, reset } = useForm<IReview>();
   const { user } = useAppSelector((state: { user: any }) => state.user);
 
-  const {
-    data: book,
-    isLoading,
-    error,
-  } = useGetSingleBookQuery(id, {
+  const { data: book, isLoading } = useGetSingleBookQuery(id, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -79,14 +75,16 @@ const BookDetails = () => {
     if (deletedData?.success) {
       toast.success(deletedData?.message);
     } else if (deletedError) {
-      toast.error(deletedError?.data?.message);
+      // toast.error(deletedError?.data?.message);
+      toast.error('Failed to delte the book!');
     }
 
     if (updateBookData?.success) {
       toast.success('Successfully added the review😃');
       reset();
     } else if (updateBookError) {
-      toast.error(updateBookError?.data?.message);
+      // toast.error(updateBookError?.data?.message);
+      toast.error('Failed to add the review!');
     }
   }, [
     deletedData?.message,
@@ -97,6 +95,14 @@ const BookDetails = () => {
     updateBookData?.success,
     updateBookError,
   ]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="py-10 md:py-20 px-12">

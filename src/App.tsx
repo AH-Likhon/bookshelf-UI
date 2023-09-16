@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unsafe-optional-chaining */
 import { useEffect } from 'react';
 import Main from './Layout/Main';
@@ -15,7 +16,7 @@ function App() {
   const [refresh] = useRefreshTokenMutation();
   const refreshToken = Cookies.get('refreshToken');
 
-  const { data: books, error } = useGetAllBooksQuery({
+  const { data: books } = useGetAllBooksQuery({
     refetchOnMountOrArgChange: true,
   });
 
@@ -25,7 +26,8 @@ function App() {
         dispatch(setLoading(true));
 
         try {
-          const res = await refresh({});
+          const res: any = await refresh({});
+
           if (res?.data?.success) {
             // console.log(res.data.data.user);
             const { email, name, _id } = res?.data?.data?.user;
