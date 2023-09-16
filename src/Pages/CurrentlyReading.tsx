@@ -31,7 +31,8 @@ const CurrentlyReading = () => {
     if (updateBookData?.success) {
       toast.success(updateBookData?.message);
     } else if (updateBookError) {
-      toast.error(updateBookError?.data?.message);
+      // toast.error(updateBookError?.data?.message);
+      toast.error('Succesfully changed the status!');
     }
   }, [updateBookData, updateBookError]);
 
