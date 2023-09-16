@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAddNewBookMutation } from '@/Redux/api/apiSlice';
-import { isFetchBaseQueryError, useAppSelector } from '@/Redux/hooks';
+import { useAppSelector } from '@/Redux/hooks';
 import { IBook, genres } from '@/Constants/constants';
 import { format } from 'date-fns';
 import { useEffect } from 'react';
@@ -66,14 +66,6 @@ const AddNewBook = () => {
     addBookError,
     reset,
   ]);
-
-  if (isFetchBaseQueryError(addBookError)) {
-    return (
-      <div className="w-1/1 h-screen flex items-center justify-center">
-        <span className="loading loading-ring loading-lg"></span>
-      </div>
-    );
-  }
 
   return (
     <div className="py-10 md:py-20 px-12">

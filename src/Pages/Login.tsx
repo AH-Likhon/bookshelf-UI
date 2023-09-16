@@ -4,7 +4,7 @@ import { Inputs, User } from '@/Constants/constants';
 import { useLogInMutation } from '@/Redux/api/apiSlice';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { isFetchBaseQueryError, useAppDispatch } from '@/Redux/hooks';
+import { useAppDispatch } from '@/Redux/hooks';
 import { setUser } from '@/Redux/features/user/userSlice';
 
 const Login = () => {
@@ -60,14 +60,6 @@ const Login = () => {
     userData,
     from,
   ]);
-
-  if (isFetchBaseQueryError(loginError)) {
-    return (
-      <div className="w-1/1 h-screen flex items-center justify-center">
-        <span className="loading loading-ring loading-lg"></span>
-      </div>
-    );
-  }
 
   return (
     <div className="py-10 md:py-20 px-12 h-full lg:h-[81vh]">

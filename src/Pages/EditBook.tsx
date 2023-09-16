@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { format, parse } from 'date-fns';
 import { IBook, genres } from '@/Constants/constants';
-import { isFetchBaseQueryError, useAppSelector } from '@/Redux/hooks';
+import { useAppSelector } from '@/Redux/hooks';
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -99,7 +99,7 @@ const EditBook = () => {
     }
   }, [reset, updateBookData, updateBookError]);
 
-  if (isLoading || isFetchBaseQueryError(error)) {
+  if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
         <span className="loading loading-ring loading-lg"></span>

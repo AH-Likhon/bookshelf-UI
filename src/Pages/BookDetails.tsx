@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { IReview } from '@/Constants/constants';
-import { isFetchBaseQueryError, useAppSelector } from '@/Redux/hooks';
+import { useAppSelector } from '@/Redux/hooks';
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -97,14 +97,6 @@ const BookDetails = () => {
     updateBookData?.success,
     updateBookError,
   ]);
-
-  if (isLoading || isFetchBaseQueryError(error)) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <span className="loading loading-ring loading-lg"></span>
-      </div>
-    );
-  }
 
   return (
     <div className="py-10 md:py-20 px-12">
