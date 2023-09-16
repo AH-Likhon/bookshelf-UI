@@ -31,8 +31,6 @@ function App() {
             const { email, name, _id } = res?.data?.data?.user;
             const { accessToken } = res?.data?.data;
             dispatch(setUser({ _id, email, name, token: accessToken }));
-
-            dispatch(setBooksSuccess(books));
           }
         } catch (error) {
           // console.error('Error refreshing access token:', error);
@@ -42,6 +40,7 @@ function App() {
       }
     };
 
+    dispatch(setBooksSuccess(books?.data));
     refreshAccessToken();
   }, [books, dispatch, refresh, refreshToken]);
 

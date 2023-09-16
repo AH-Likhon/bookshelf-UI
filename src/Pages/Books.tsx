@@ -15,25 +15,21 @@ const Books = () => {
       </h2>
       <div className="flex flex-col md:flex-row gap-12">
         <Left />
-        {!isLoading && updatedBooks?.data && updatedBooks?.data.length > 0 && (
+        {!isLoading && updatedBooks && updatedBooks?.length > 0 && (
           <div className="w-1/1 md:w-2/3 lg:w-3/4 grid gap-8 grid-cols-1 lg:grid-cols-2">
-            {updatedBooks?.data &&
-              updatedBooks?.data.length > 0 &&
-              updatedBooks?.data?.map((book: IBook) => (
-                <Card key={book._id} book={book} />
-              ))}
+            {updatedBooks?.map((book: IBook, index: number) => (
+              <Card key={index} book={book} />
+            ))}
           </div>
         )}
 
-        {!isLoading &&
-          updatedBooks?.data &&
-          updatedBooks?.data.length === 0 && (
-            <div className="w-1/1 md:w-2/3 lg:w-3/4 h-screen">
-              <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl">
-                Didn't find any books❗😞
-              </h2>
-            </div>
-          )}
+        {!isLoading && updatedBooks && updatedBooks?.length === 0 && (
+          <div className="w-1/1 md:w-2/3 lg:w-3/4 h-screen">
+            <h2 className="text-center font-semibold text-xl md:text-2xl lg:text-3xl">
+              Didn't find any books❗😞
+            </h2>
+          </div>
+        )}
 
         {isLoading && (
           <div className="w-1/1 md:w-2/3 lg:w-3/4 h-screen flex items-start justify-center">

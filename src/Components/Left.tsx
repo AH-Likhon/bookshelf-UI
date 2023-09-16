@@ -1,7 +1,7 @@
 import { genres } from '@/Constants/constants';
 import { useGetAllBooksQuery } from '@/Redux/api/apiSlice';
 import { setBooksSuccess } from '@/Redux/features/books/bookSlice';
-import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
+import { useAppDispatch } from '@/Redux/hooks';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 
@@ -43,7 +43,7 @@ const Left = () => {
 
   useEffect(() => {
     if (books) {
-      dispatch(setBooksSuccess(books));
+      dispatch(setBooksSuccess(books?.data));
     }
   }, [books, dispatch]);
 
