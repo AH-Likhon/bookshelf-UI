@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json", // Inherit base settings from tsconfig.json
+    "compilerOptions": {
+      "outDir": "./build", // Output directory for production build
+      "target": "ESNext",
+      "module": "ESNext",
+      "removeComments": true, // Remove comments from output
+      "declaration": true, // Generate declaration files (.d.ts)
+      "sourceMap": false, // Disable source maps in production
+      "noEmit": false // Enable emitting output files
+    },
+    "include": ["src"], // Include source files
+    "exclude": ["node_modules"] // Exclude node_modules directory
+  }
+  
