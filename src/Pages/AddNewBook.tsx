@@ -36,7 +36,7 @@ const AddNewBook = () => {
 
       reader.onload = () => {
         const base64Result = reader.result ? reader.result.toString() : null;
-        const processedData = {
+        const processedData: IBook = {
           ...data,
           image: base64Result,
           publicationDate: formattedPublicationDate,
